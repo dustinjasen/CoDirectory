@@ -1,7 +1,7 @@
 $(document).ready(function(e) {
   
   populateDeptOptions()
-  populateLocationOptions()
+  populateLocationforDeptOptions()
   
       // These are the constraints used to validate the form
       var constraints = {
@@ -29,6 +29,7 @@ $(document).ready(function(e) {
           },
         },
         
+        /*
         newMobile: {
           presence: true,
           numericality: {
@@ -40,6 +41,7 @@ $(document).ready(function(e) {
             message: "^Please check phone number",
           },
         },
+        */
         
         newEmailAddress: {
           presence: true,
@@ -175,12 +177,21 @@ function allResults() {
         let eMail = allData[i]['email'];
         let dID = allData[i]['departmentID'];
         
-        $('#mainTable').append(
-          "<tr class='clickRow'><td class='d-none pID'>"+pID+"</td><td class='d-none dID'>"+dID+"</td><td scope='row' class='fName'>"+firstName+"</td><td scope='row' class='lName'>"+lastName+"</td><td scope='row' class='deptName'>"+dept+"</td><td scope='row' class='locationName'>"+location+"</td><td scope='row' class='eAddress'><a href='#'>"+eMail+"</a></td></tr>"
-        );
+        //Table structure in variables 
+        let col1 = "<tr class='clickRow'><td class='d-none pID'>"+pID+"</td>";
+        let col2 = "<td class='d-none dID'>"+dID+"</td>";
+        let col3 = "<td scope='row' class='fName'>"+firstName+"</td>";
+        let col4 = "<td scope='row' class='lName'>"+lastName+"</td>";
+        let col5 = "<td scope='row' class='deptName'>"+dept+"</td>";
+        let col6 = "<td scope='row' class='locationName'>"+location+"</td>";
+        let col7 = "<td scope='row' class='eAddress'><a style='color: #D03800;' href='#'>"+eMail+"</a></td>";
+        let editBtn = "<td><a a class='text-primary' data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal'><i class='far fa-edit'></i></a> ";
+        let delBtn = "<a class='text-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></a></td></tr>"
+        
+        $('#mainTable').append(col1+col2+col3+col4+col5+col6+col7+editBtn+delBtn);
       }
       
-      /* TEST FUNCTION 
+      /* TEST FUNCTION for ID's
       
       var clickForID = 
         $(".clickRow").click(function() {
@@ -191,11 +202,12 @@ function allResults() {
         
       */
       
-      var clickForPreview =
+      // Make rows clickable to show preview and populate edit modal 
         $(".clickRow").click(function() {
           $('#previewTable').html("");
           var row = $(this).closest("tr");
           
+          //Use data already called opposed to invoking another PHP routine & DB call 
           let previewID = row.find(".pID").text();
           let previewFirstName = row.find(".fName").text();
           let previewLastName = row.find(".lName").text();
@@ -204,18 +216,57 @@ function allResults() {
           let previewEmail = row.find(".eAddress").text();
           let previewDeptID = row.find(".dID").text();
           
-        $('#previewTable').append(
-          "<tr><td scope='row'><img src='img/avatar100.png' min-height='25vh' alt='...'></td></tr><td class='d-none' id='userID'>"+previewID+"</td><tr><td scope='row'>First Name</td><td>"+previewFirstName+"</td><tr><td scope='row'>Last Name</td><td>"+previewLastName+"</td><tr><td scope='row'>Department</td><td>"+previewDept+"</td></tr><tr><td scope='row'>Location</td><td>"+previewLocation+"</td><tr><td scope='row'>Email</td><td>"+previewEmail+"</td></tr><tr><td><button data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal' class='btn btn-success'>Edit</button> <button type='button' class='btn btn-danger' onClick='deleteProfile()'>Delete</button></td></tr>");
           
+          //Table content in variables
+          let row1 = "<tr><td scope='row'><img src='img/avatar100.png' min-height='25vh' alt='...'></td></tr>";
+          let row2 = "<tr><td class='d-none' id='userID'>"+previewID+"</td></tr>";
+          let row3 = "<tr><td scope='row'>First Name</td><td>"+previewFirstName+"</td></tr>";
+          let row4 = "<tr><td scope='row'>Last Name</td><td>"+previewLastName+"</td></tr>";
+          let row5 = "<tr><td scope='row'>Department</td><td>"+previewDept+"</td></tr>";
+          let row6 = "<tr><td scope='row'>Location</td><td>"+previewLocation+"</td></tr>";
+          let row7 = "<tr><td scope='row'>Email</td><td>"+previewEmail+"</td></tr>";
+          let editBtn = "<tr><td></td><td><button data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal' class='btn btn-success'><i class='far fa-edit'></i></button> ";
+          let delBtn = "<button type='button' class='btn btn-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></button></td></tr>"
+          
+          //Preview Table
+          $('#previewTable').append(row1+row2+row3+row4+row5+row6+row7+editBtn+delBtn);
+          
+          //Ready code for edit modal          
           $('#userEditID').html(previewID);
           $('#editFirstName').val(previewFirstName);
           $('#editLastName').val(previewLastName);
           $('#editEmailAddress').val(previewEmail);
           $('#editDept').val(previewDeptID);
           
-        });
+        });      
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      alert(':' + textStatus +' : '+ errorThrown +' || Please press F12 to access Network Log for further info');
+    },
+  });
+}
+
+function allLocationsTable() {
+	$.ajax({
+	url: './php/getAllLocations.php',
+	dataType: "json",
+	success: 
+		function(result) {
+      var allData = result;
+
+      $('.locationAdminTable').html('')
       
-      
+      for (var i=0; i<allData.length; i++) {
+        //Table variables
+        //let lID = allData[i]['id'];
+        let name = allData[i]['name'];
+        let col1 = "<tr><td>"+name+"</td>";
+        let editBtn = '<td><button type="submit" class="btn btn-primary" class="btnEditLocation"><i class="far fa-edit"></i></button></td>';
+        let delBtn = '<td><button type="submit" class="btn btn-primary" class="btnDelLocation"><i class="far fa-trash-alt"></i></button></td></tr>';
+        
+        //Location Table
+        $('.locationAdminTable').append(col1+editBtn+delBtn);
+      }
       
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -223,6 +274,45 @@ function allResults() {
     },
   });
 }
+
+$('#allLocations').on('click', function(e) {
+  allLocationsTable()
+})
+
+
+function allDeptTable() {
+	$.ajax({
+	url: './php/getAllDepartments.php',
+	dataType: "json",
+	success: 
+		function(result) {
+      var allData = result;
+      
+      console.log(allData);
+      var dID, name;
+            
+      $('#mainTable').html('')
+      
+      for (var i=0; i<allData.length; i++) {
+        let dID = allData[i]['id'];
+        let name = allData[i]['name'];
+        
+        $('#mainTable').append(
+          "<tr><td>"+dID+"</td><td>"+name+"</td></tr>"
+        );
+      }
+
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      alert(':' + textStatus +' : '+ errorThrown +' || Please press F12 to access Network Log for further info');
+    },
+  });
+}
+
+$('#allDepts').on('click', function(e) {
+  allDeptTable()
+})
+
 
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -293,15 +383,11 @@ function populateDeptOptions(id, name) {
       
       var deptDropdownEditUser = $('#editDept');
       deptDropdownEditUser.empty();
-
-              
+          
       $.each(data, function (key, value) {
         deptDropdownNewUser.append($('<option value=' + value.id + '>' + value.name +'</option>'))
         deptDropdownEditUser.append($('<option value=' + value.id + '>' + value.name +'</option>'));
       });
-      
-      
-
     },
     error: function(jqXHR, textStatus, errorThrown) {
       alert(':' + textStatus +' : '+ errorThrown +' || Please press F12 to access Network Log for further info');
@@ -309,7 +395,7 @@ function populateDeptOptions(id, name) {
   });
 }
 
-function populateLocationOptions(id, name) {
+function populateLocationforDeptOptions() {
 	$.ajax({
 	url: './php/getAllLocations.php',
 	dataType: "json",
@@ -320,20 +406,18 @@ function populateLocationOptions(id, name) {
       
       var locationNewDept = $('#editLocationNewDept');
       locationNewDept.empty();
-      
-            
+                  
       $.each(data, function (key, value) {
         locationNewDept.append($('<option value=' + value.id + '>' + value.name +'</option>'))
       });
       
-      
-
     },
     error: function(jqXHR, textStatus, errorThrown) {
       alert(':' + textStatus +' : '+ errorThrown +' || Please press F12 to access Network Log for further info');
     },
   });
 }
+
 
 function insertProfile (firstName, lastName, email, departmentId) {
 	$.ajax({
@@ -399,7 +483,6 @@ $('#editProfile').on('submit', function(e) {
   var previewLastName = $('#editLastName').val();
   var previewEmail = $('#editEmailAddress').val();
   var previewDeptID = $('#editDept').val();
-  
   editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
 });
 
@@ -428,11 +511,9 @@ function editProfileAJAX(previewID, previewFirstName, previewLastName, previewDe
   });
 }
 
-
 $('#createLocation').on('submit', function(e) {
   e.preventDefault();  
-  var locationID = $('#newLocation').val();
-
+  var locationID = $('#newLocationForm').val();
   newLocationAJAX(locationID);
 })
 
@@ -500,7 +581,7 @@ function searchEmail() {
   //loop for first name
   
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[5];
+    td = tr[i].getElementsByTagName("td")[6];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -522,7 +603,7 @@ function searchLoc() {
   //loop for first name
   
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[4];
+    td = tr[i].getElementsByTagName("td")[5];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -544,7 +625,7 @@ function searchDept() {
   //loop for first name
   
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[3];
+    td = tr[i].getElementsByTagName("td")[4];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -566,7 +647,7 @@ function searchLast() {
   //loop for first name
   
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[2];
+    td = tr[i].getElementsByTagName("td")[3];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -588,7 +669,7 @@ function searchFirst() {
   //loop for first name
   
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
+    td = tr[i].getElementsByTagName("td")[2];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
