@@ -17,6 +17,12 @@
   font-size: 1rem;
   }
 
+.colSearchMobile {
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+  }
+
 
 .colSearch:focus {
   border: none!important;
@@ -24,9 +30,32 @@
   color: black;
   }
 
-#mainTable+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: #000!important;
+
+.mobileOnly {
+  display: none;
 }
+
+.previewPanelHeads {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.showMe {
+  display: block;
+}
+
+.hideMe {
+  display: none;
+}
+
+.selectedTR {
+  background-color: blue;
+}
+
+.mobileRows {
+    
+}
+
 
 
 /* Mobile CSS */
@@ -41,5 +70,8 @@
     #previewDiv {
       display: none;
     }
+  .mobileOnly {
+    display: block;
+  }
 }
 

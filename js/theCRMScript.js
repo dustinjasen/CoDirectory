@@ -1,7 +1,8 @@
 $(document).ready(function(e) {
   
-  populateDeptOptions()
-  populateLocationforDeptOptions()
+  populateDeptOptions();
+  populateLocationOptionsMisc();
+  populateLocationforDeptOptions();
   
       // These are the constraints used to validate the form
       var constraints = {
@@ -161,13 +162,35 @@ function allResults() {
 	success: 
 		function(result) {
       
+      $('#allDataTable').html('');
+      
       var allData = result['data'];
-      var pID, firstName, lastName, dept, location, eMail, dID;
+      var pID, firstName, lastName, dept, location, eMail, dID, lID;
       
       var previewID, previewFirstName, previewLastName, previewDept, previewLocation, previewEmail, previewDeptID;
       
-      $('#mainTable').html('')
+
       
+      
+    if ($(Document).width() > 990) {
+      
+      let tableStart = '<table id="allDataTable" class="table table-striped table-hover col-8">';
+        
+      let tHeadStart = "<thead><tr>";
+      let tHead1 = '<th scope="col" class="col-2"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(2)"></i><input onkeyup="searchFirst()" id="searchFirst" class="form-control colSearch" type="text" placeholder="First"></th>';
+      let tHead2 = '<th scope="col" class="col-2"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(3)"></i><input onkeyup="searchLast()" id="searchLast" class="form-control colSearch" type="text" placeholder="Surname"></th>';
+      let tHead3 = '<th scope="col" class="col"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(4)"></i><input onkeyup="searchDept()" id="searchDept" class="form-control colSearch" type="text" placeholder="Department"></th>';
+      let tHead4 = '<th scope="col" class="col"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(5)"></i><input onkeyup="searchLoc()" id="searchLoc" class="form-control colSearch" type="text" placeholder="Location"></th>';
+      let tHead5 = '<th scope="col" class="col-2"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(6)"></i><input onkeyup="searchEmail()" id="searchEmail" class="form-control colSearch" type="text" placeholder="Email"></th>';
+      let tHead6 = '<th scope="col" class="col-1"></th>'
+      let tHeadEnd = "</tr></thead>";
+      
+      let tBody = "<tbody id='mainTable'></tbody>";
+      
+      let tableEnd = "</table>";
+      
+      $('#directoryData').html(tableStart+tHeadStart+tHead1+tHead2+tHead3+tHead4+tHead5+tHead6+tHeadEnd+tBody+tableEnd);
+ 
       for (var i=0; i<allData.length; i++) {
         let pID = allData[i]['id'];
         let firstName = allData[i]['firstName'];
@@ -176,38 +199,81 @@ function allResults() {
         let location = allData[i]['location'];
         let eMail = allData[i]['email'];
         let dID = allData[i]['departmentID'];
+        let lID = allData[i]['locationID'];
         
-        //Table structure in variables 
-        let col1 = "<tr class='clickRow'><td class='d-none pID'>"+pID+"</td>";
+        //Table structure in variables    
+        
+        let trStart = "<tr class='clickRow'>";
+        let col1 = "<td class='d-none pID'>"+pID+"</td>";
         let col2 = "<td class='d-none dID'>"+dID+"</td>";
         let col3 = "<td scope='row' class='fName'>"+firstName+"</td>";
         let col4 = "<td scope='row' class='lName'>"+lastName+"</td>";
         let col5 = "<td scope='row' class='deptName'>"+dept+"</td>";
         let col6 = "<td scope='row' class='locationName'>"+location+"</td>";
         let col7 = "<td scope='row' class='eAddress'><a style='color: #D03800;' href='#'>"+eMail+"</a></td>";
-        let editBtn = "<td><a a class='text-primary' data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal'><i class='far fa-edit'></i></a> ";
-        let delBtn = "<a class='text-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></a></td></tr>"
+        //let editBtn = "<td><a a class='text-primary' data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal'><i class='far fa-edit'></i></a> ";
+        let delBtn = "<td><a class='text-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></a></td>"
+        let col8 = "<td class='d-none lID'>"+lID+"</td>";
+        let trEnd = "</tr>";
         
-        $('#mainTable').append(col1+col2+col3+col4+col5+col6+col7+editBtn+delBtn);
+        $('#mainTable').append(trStart+col1+col2+col3+col4+col5+col6+col7+delBtn+col8+trEnd);
       }
-      
-      /* TEST FUNCTION for ID's
-      
-      var clickForID = 
-        $(".clickRow").click(function() {
-          var row = $(this).closest("tr");
-          var pID = row.find(".pID").text();
-          console.log(pID);
-        });
         
-      */
+         }
+      
+    else {
+        
+      let tableStart = '<table id="allDataTable" class="table table-striped table-hover">';
+        
+      let tBody = "<tbody id='mainTable'></tbody>";
+        
+      let tableEnd = "</table>";
+      
+      $('#directoryData').html(tableStart+tBody+tableEnd);
+        
+      for (var j=0; j<allData.length; j++) {
+        let pID = allData[j]['id'];
+        let firstName = allData[j]['firstName'];
+        let lastName = allData[j]['lastName'];
+        let dept = allData[j]['department'];
+        let location = allData[j]['location'];
+        let eMail = allData[j]['email'];
+        let dID = allData[j]['departmentID'];
+        let lID = allData[j]['locationID'];
+        //Table structure in variables
+        
+        let trStart = "<tr class='clickRowMobile mobileRows'>";
+        //col1 - col5 are hidden and included for data use only
+        let col1 = "<td class='d-none pID'>"+pID+"</td>";
+        let col2 = "<td class='d-none dID'>"+dID+"</td>";
+        let col3 = "<td class='d-none lID'>"+lID+"</td>";
+        let col4 = "<td class='locationName d-none'>"+location+"</td>";
+        let col5 = "<td class='deptName d-none'>"+dept+"</td>";
+        let col6 = "<td scope='row' class='fName'>"+firstName+"</td>";
+        let col7 = "<td scope='row' class='lName'>"+lastName+"</td>";
+        let col8 = "<td scope='row' class='eAddress'><a style='color: #D03800;' href="+eMail+"><i class='far fa-envelope'></i></a></td>";
+                
+        let trEnd = "</tr>";
+        
+        $('#mainTable').append(trStart+col1+col2+col3+col4+col5+col6+col7+col8+trEnd);
+      }
+}
+
       
       // Make rows clickable to show preview and populate edit modal 
         $(".clickRow").click(function() {
-          $('#previewTable').html("");
+          $('.previewTable').html("");
+          
+          
+          $('#createProfileDesktop').removeClass('showMe');
+          $('#createProfileDesktop').addClass('hideMe');
+
+          $('#editProfileDesktop').removeClass('hideMe');
+          $('#editProfileDesktop').addClass('showMe');
+          
           var row = $(this).closest("tr");
           
-          //Use data already called opposed to invoking another PHP routine & DB call 
+        //Use data already called opposed to invoking another PHP routine & DB call 
           let previewID = row.find(".pID").text();
           let previewFirstName = row.find(".fName").text();
           let previewLastName = row.find(".lName").text();
@@ -215,29 +281,44 @@ function allResults() {
           let previewLocation = row.find(".locationName").text();
           let previewEmail = row.find(".eAddress").text();
           let previewDeptID = row.find(".dID").text();
+          let previewLocationID = row.find(".lID").text();
           
-          
-          //Table content in variables
-          let row1 = "<tr><td scope='row'><img src='img/avatar100.png' min-height='25vh' alt='...'></td></tr>";
-          let row2 = "<tr><td class='d-none' id='userID'>"+previewID+"</td></tr>";
-          let row3 = "<tr><td scope='row'>First Name</td><td>"+previewFirstName+"</td></tr>";
-          let row4 = "<tr><td scope='row'>Last Name</td><td>"+previewLastName+"</td></tr>";
-          let row5 = "<tr><td scope='row'>Department</td><td>"+previewDept+"</td></tr>";
-          let row6 = "<tr><td scope='row'>Location</td><td>"+previewLocation+"</td></tr>";
-          let row7 = "<tr><td scope='row'>Email</td><td>"+previewEmail+"</td></tr>";
-          let editBtn = "<tr><td></td><td><button data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal' class='btn btn-success'><i class='far fa-edit'></i></button> ";
-          let delBtn = "<button type='button' class='btn btn-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></button></td></tr>"
-          
-          //Preview Table
-          $('#previewTable').append(row1+row2+row3+row4+row5+row6+row7+editBtn+delBtn);
-          
-          //Ready code for edit modal          
+        //Ready code for edit modal for MOBILE         
           $('#userEditID').html(previewID);
           $('#editFirstName').val(previewFirstName);
           $('#editLastName').val(previewLastName);
           $('#editEmailAddress').val(previewEmail);
           $('#editDept').val(previewDeptID);
           
+        //Ready code for edit panel for Desktop         
+          $('#userEditIDDesktop').html(previewID);
+          $('#editFirstNameDesktop').val(previewFirstName);
+          $('#editLastNameDesktop').val(previewLastName);
+          $('#editEmailAddressDesktop').val(previewEmail);
+          $('#editDeptDesktop').val(previewDeptID);
+          
+          $('#editLocDesktop').val(previewLocationID);
+        
+              
+        /*Table form for Desktop Edit Profile in variables
+          let formStart = "<form id='editProfileDesktop' name='editProfileDesktop' method='post'>";
+          let row1 = "<tr><td class='d-none' id='userID'>"+previewID+"</td></tr>";
+          let row2 = "<tr><td scope='row'>Edit User</tr></td>";
+          let row3 = "<tr><td scope='row'>First Name</td><td><input type='text' class='form-control' id='editFirstNameDesktop' name='editFirstNameDesktop' placeholder='Edit First Name' value='' required><div class='col-sm-5 messages'></div></td></tr>";
+          let row4 = "<tr><td scope='row'>Last Name</td><td><input type='text' class='form-control' id='editLastNameDesktop' name='editLastNameDesktop' placeholder='Edit Second Name' value'' required><div class='col-sm-5 messages'></div></td></tr>";
+          let row5 = "<tr><td scope='row'>Email</td><td><input type='email' class='form-control' id='editEmailAddressDesktop' name='editEmailAddressDesktop' placeholder='Edit eMail Address' value'' required><div class='col-sm-5 messages'></div></td></tr>";
+          let row6 = "<tr><td scope='row'>Department</td><td><select class='form-select' aria-label='editDeptDesktop' name='editDeptDesktop' id='editDeptDesktop' required></select><div class='col-sm-5 messages'></div></td></tr>";
+          let row7 = "<tr><td scope='row'>Location</td><td>previewholder</td></tr>";
+          
+          let editBtn = "<tr><td></td><td><button data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal' class='btn btn-success'><i class='far fa-edit'></i></button> ";
+          let delBtn = "<button type='button' class='btn btn-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></button></td></tr>"
+          let formEnd = "</form>";
+          
+        //Preview Table
+          //$('.previewDiv').append(formStart+row1+row2+row3+row4+row5+row6+row7+editBtn+delBtn+formEnd);
+          
+          */
+                    
         });      
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -254,7 +335,8 @@ function allLocationsTable() {
 		function(result) {
       var allData = result;
 
-      $('.locationAdminTable').html('')
+      $('.locationAdminTable').html('');
+      $('.previewTable').html("");
       
       for (var i=0; i<allData.length; i++) {
         //Table variables
@@ -266,6 +348,7 @@ function allLocationsTable() {
         
         //Location Table
         $('.locationAdminTable').append(col1+editBtn+delBtn);
+        $('.previewTable').append(col1+editBtn+delBtn);
       }
       
     },
@@ -275,7 +358,7 @@ function allLocationsTable() {
   });
 }
 
-$('#allLocations').on('click', function(e) {
+$('.allLocations').on('click', function(e) {
   allLocationsTable()
 })
 
@@ -287,18 +370,14 @@ function allDeptTable() {
 	success: 
 		function(result) {
       var allData = result;
-      
-      console.log(allData);
-      var dID, name;
-            
-      $('#mainTable').html('')
+                  
+      $('.previewTable').html('')
       
       for (var i=0; i<allData.length; i++) {
-        let dID = allData[i]['id'];
         let name = allData[i]['name'];
         
-        $('#mainTable').append(
-          "<tr><td>"+dID+"</td><td>"+name+"</td></tr>"
+        $('.previewTable').append(
+          "<tr><td>"+name+"</td></tr>"
         );
       }
 
@@ -309,65 +388,12 @@ function allDeptTable() {
   });
 }
 
-$('#allDepts').on('click', function(e) {
+$('.previewPanelAdminDept').on('click', function(e) {
   allDeptTable()
 })
 
 
-function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("allDataTable");
-  switching = true;
-  //Set the sorting direction to ascending:
-  dir = "asc"; 
-  /*Make a loop that will continue until
-  no switching has been done:*/
-  while (switching) {
-    //start by saying: no switching is done:
-    switching = false;
-    rows = table.rows;
-    /*Loop through all table rows (except the
-    first, which contains table headers):*/
-    for (i = 1; i < (rows.length - 1); i++) {
-      //start by saying there should be no switching:
-      shouldSwitch = false;
-      /*Get the two elements you want to compare,
-      one from current row and one from the next:*/
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
-      /*check if the two rows should switch place,
-      based on the direction, asc or desc:*/
-      if (dir == "asc") {
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-          //if so, mark as a switch and break the loop:
-          shouldSwitch= true;
-          break;
-        }
-      } else if (dir == "desc") {
-        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-          //if so, mark as a switch and break the loop:
-          shouldSwitch = true;
-          break;
-        }
-      }
-    }
-    if (shouldSwitch) {
-      /*If a switch has been marked, make the switch
-      and mark that a switch has been done:*/
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-      //Each time a switch is done, increase this count by 1:
-      switchcount ++;      
-    } else {
-      /*If no switching has been done AND the direction is "asc",
-      set the direction to "desc" and run the while loop again.*/
-      if (switchcount == 0 && dir == "asc") {
-        dir = "desc";
-        switching = true;
-      }
-    }
-  }
-}
+
 
 function populateDeptOptions(id, name) {
 	$.ajax({
@@ -383,10 +409,14 @@ function populateDeptOptions(id, name) {
       
       var deptDropdownEditUser = $('#editDept');
       deptDropdownEditUser.empty();
+      
+      var deptDropdownEditUserDesktop = $('#editDeptDesktop');
+      deptDropdownEditUserDesktop.empty();
           
       $.each(data, function (key, value) {
-        deptDropdownNewUser.append($('<option value=' + value.id + '>' + value.name +'</option>'))
+        deptDropdownNewUser.append($('<option value=' + value.id + '>' + value.name +'</option>'));
         deptDropdownEditUser.append($('<option value=' + value.id + '>' + value.name +'</option>'));
+        deptDropdownEditUserDesktop.append($('<option value=' + value.id + '>' + value.name +'</option>'));
       });
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -394,6 +424,30 @@ function populateDeptOptions(id, name) {
     },
   });
 }
+
+function populateLocationOptionsMisc() {
+	$.ajax({
+	url: './php/getAllLocations.php',
+	dataType: "json",
+	success: 
+		function(result) {
+      
+      var data = result;
+      
+      var locationDropDownUserDesktopEdit = $('#editLocDesktop');
+      locationDropDownUserDesktopEdit.empty();
+                  
+      $.each(data, function (key, value) {
+        locationDropDownUserDesktopEdit.append($('<option value=' + value.id + '>' + value.name +'</option>'))
+      });
+      
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      alert(':' + textStatus +' : '+ errorThrown +' || Please press F12 to access Network Log for further info');
+    },
+  });
+}
+
 
 function populateLocationforDeptOptions() {
 	$.ajax({
@@ -476,6 +530,8 @@ function deleteProfileAJAX (profileID) {
   });
 }
 
+// Edit Profile Mobile/Modal Listener
+
 $('#editProfile').on('submit', function(e) {
   e.preventDefault();  
   var previewID = $('#userEditID').text();
@@ -483,6 +539,18 @@ $('#editProfile').on('submit', function(e) {
   var previewLastName = $('#editLastName').val();
   var previewEmail = $('#editEmailAddress').val();
   var previewDeptID = $('#editDept').val();
+  editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
+});
+
+// Edit Profile Desktop Listener
+
+$('#editProfileDesktop').on('submit', function(e) {
+  e.preventDefault();  
+  var previewID = $('#userEditIDDesktop').text();
+  var previewFirstName = $('#editFirstNameDesktop').val();
+  var previewLastName = $('#editLastNameDesktop').val();
+  var previewEmail = $('#editEmailAddressDesktop').val();
+  var previewDeptID = $('#editDeptDesktop').val();
   editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
 });
 
@@ -516,6 +584,15 @@ $('#createLocation').on('submit', function(e) {
   var locationID = $('#newLocationForm').val();
   newLocationAJAX(locationID);
 })
+
+$('#addUserDesktop').on('click', function() {
+  $('.previewTable').html("");
+  $('#editProfileDesktop').removeClass('showMe');
+  $('#editProfileDesktop').addClass('hideMe');
+  $('#createProfileDesktop').removeClass('hideMe');
+  $('#createProfileDesktop').addClass('showMe');
+})
+
 
 function newLocationAJAX (locationID) {
 	$.ajax({
@@ -681,7 +758,62 @@ function searchFirst() {
   }
 }
 
+// Sort Functions
 
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("allDataTable");
+  switching = true;
+  //Set the sorting direction to ascending:
+  dir = "asc"; 
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /*check if the two rows should switch place,
+      based on the direction, asc or desc:*/
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      //Each time a switch is done, increase this count by 1:
+      switchcount ++;      
+    } else {
+      /*If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again.*/
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
 
 /*
 var xxx = function(xxx) {

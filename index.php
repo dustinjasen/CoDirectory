@@ -40,24 +40,16 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="./">Company Directory</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mobileOnly">
               <a class="nav-link" href="#createUserModal" data-bs-toggle="modal" data-bs-target="#createUserModal"><i class="fas fa-user-plus"></i></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#addLocation" data-bs-toggle="modal" data-bs-target="#addLocation" id="allLocations"><i class="fas fa-search-plus"></i></a>
+            <li class="nav-item mobileOnly">
+              <a class="nav-link allLocations" href="#addLocation" data-bs-toggle="modal" data-bs-target="#addLocation"><i class="fas fa-map-marker-alt"></i></a>
             </li>                
-            <li class="nav-item">
-              <a class="nav-link" href="#addDepartment" data-bs-toggle="modal" data-bs-target="#addDepartment"><i class="fas fa-folder-plus"></i></a>
+            <li class="nav-item mobileOnly">
+              <a class="nav-link" href="#addDepartment" data-bs-toggle="modal" data-bs-target="#addDepartment"><i class="fas fa-users-cog"></i></a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-sliders-h"></i></a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#" >Locations</a></li>
-                <li><a class="dropdown-item" href="#" id="allDepts">Departments</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
+
           </ul>
         </div>
       </div>
@@ -69,44 +61,130 @@
 <div class="container-fluid">
   
   <div class="row">
-    <div class="col-8">
-      <table id="allDataTable" class="table table-striped table-hover col-8">
-        <thead>
-          
-          <tr>
-            <th scope="col" class="col-2"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(2)"></i><input onkeyup="searchFirst()" id="searchFirst" class="form-control colSearch" type="text" placeholder="First"></th>
-            
-            <th scope="col" class="col-2"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(3)"></i><input onkeyup="searchLast()" id="searchLast" class="form-control colSearch" type="text" placeholder="Surname"></th>
-            
-            <th scope="col" class="col"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(4)"></i><input onkeyup="searchDept()" id="searchDept" class="form-control colSearch" type="text" placeholder="Department"></th>
-            
-            <th scope="col" class="col"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(5)"></i><input onkeyup="searchLoc()" id="searchLoc" class="form-control colSearch" type="text" placeholder="Location"></th>
-            
-            <th scope="col" class="col-2"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(6)"></i><input onkeyup="searchEmail()" id="searchEmail" class="form-control colSearch" type="text" placeholder="Email"></th>
-            
-            <th scope="col" class="col-1"></th>
-          </tr>
-          
-      </thead>
-        
-        <tbody id="mainTable"></tbody>
-      
-      </table>
-    </div>
-  
-  <div id="previewDiv" class="col-4">
-    <table class="table col-4">
+    <div class="col-8" id="directoryData"></div>
+    
+    <div id="previewDiv" class="col-4">
+    <table class="table  table-striped table-hover col-4">
       <thead>
         <tr>
-          <th scope="col">Preview</th>
+          
+          <th class="previewPanelHeads" scope="col"><a class="nav-link previewEditUser" id="addUserDesktop" href="#"><i class="fas fa-user-plus"></i></a></th>
+          <th class="previewPanelHeads" scope="col"><a class="nav-link previewPanelAdminDept" href="#"><i class="fas fa-users-cog"></i></a></th>
+          <th class="previewPanelHeads" scope="col"><a class="nav-link allLocations" href="#"><i class="fas fa-map-marker-alt"></i></a></th>
+                  
         </tr>
       </thead>
-      <tbody id="previewTable"></tbody>
+      <tbody class="previewTable"></tbody>
     </table>
+    
+    <div class="previewDiv">
+      <!-- Start of Form // Edit Profile Input Group -->
+      <form id="editProfileDesktop" name="editProfileDesktop" method="post" class="hideMe">
+          
+        <div class="mb-3 form-group">
+          <label for="editFirstNameDesktop" class="form-label">Edit First Name</label>
+          <input type="text" class="form-control" id="editFirstNameDesktop" name="editFirstNameDesktop" placeholder="First name" value="" required>
+          <div class="col-sm-5 messages"></div>
+        </div>
+        
+        <div class="mb-3 form-group">
+          <label for="editLastNameDesktop" class="form-label">Edit Last name</label>
+          <input type="text" class="form-control" id="editLastNameDesktop" name="editLastNameDesktop" placeholder="Second name" required>
+          <div class="col-sm-5 messages"></div>
+        </div>
+
+        <div class="mb-3 form-group">
+          <label for="editEmailAddressDesktop" class="form-label">Edit Email address</label>
+          <input type="email" class="form-control" id="editEmailAddressDesktop" placeholder="name@email.com" name="editEmailAddressDesktop" required>
+          <div class="col-sm-5 messages"></div>
+        </div>
+
+        <div class="mb-3 form-group">  
+          <label for="editDeptDesktop" class="form-label">Change Department</label>
+          <select class="form-select" aria-label="editDeptDesktop" name="editDeptDesktop" id="editDeptDesktop" required></select>
+          <div class="col-sm-5 messages"></div>
+        </div>
+        
+        <div class="mb-3 form-group">  
+          <label for="editLocDesktop" class="form-label">Change Location</label>
+          <select class="form-select" aria-label="editLocDesktop" name="editLocDesktop" id="editLocDesktop" required></select>
+          <div class="col-sm-5 messages"></div>
+        </div>
+          
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        
+        <button type="submit" class="btn btn-primary" id="btnEditProfile">Save and exit</button>
+        
+      </div>
+      
+      </form>
+        <!-- End of Form // Edit Profile Input Group -->
+
+            <!-- Start of Form // Create Profile Input Group DESKTOP ! -->
+        <form autocomplete="off" id="createProfileDesktop" name="createProfileDesktop" method="post" class="hideMe">
+          
+        <div class="mb-3 form-group">
+          <label for="newFirstName" class="form-label">First name</label>
+          <input type="text" class="form-control" id="newFirstName" name="newFirstName" placeholder="First name" required>
+          <div class="col-sm-5 messages"></div>
+        </div>
+        
+        <div class="mb-3 form-group">
+          <label for="newLastName" class="form-label">Last name</label>
+          <input type="text" class="form-control" id="newLastName" name="newLastName" placeholder="Second name" required>
+          <div class="col-sm-5 messages"></div>
+        </div>
+          
+        <div class="mb-3 form-group">
+          <label for="newEmailAddress" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="newEmailAddress" placeholder="name@email.com" name="newEmailAddress" required>
+          <div class="col-sm-5 messages"></div>
+        </div>
+
+        <div class="mb-3 form-group">  
+          <label for="selectDept" class="form-label">Department</label>
+          <select class="form-select" aria-label="linkDepartmentSelect" name="selectDept" id="selectDept" required>
+
+          </select>
+          <div class="col-sm-5 messages"></div>
+        </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit without saving</button>
+        
+        <button type="submit" class="btn btn-primary" onClick="insertNewUser()" id="btnSaveNewUser">Save and exit</button>
+        
+      </div>
+          
+        </form>
+    
+    </div>  
+    
   </div>
 
 </div>
 </div>
+
+<!-- previewPanel in Modal for mobile only view -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previewModalLabel">Delete Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>  
 
   
 <!----============------ START OF MODALS / CRUD UI FUNCTIONS ---------------------------------------->
@@ -205,7 +283,7 @@
         </div>
 
         <div class="mb-3 form-group">  
-          <label for="selectDept" class="form-label">Department</label>
+          <label for="editDept" class="form-label">Department</label>
           <select class="form-select" aria-label="editDept" name="editDept" id="editDept" required></select>
           <div class="col-sm-5 messages"></div>
         </div>
