@@ -1,8 +1,6 @@
 $(document).ready(function(e) {
-  
-  populateDeptOptions();
-  populateLocationOptionsMisc();
-  populateLocationforDeptOptions();
+  allResults();
+
   
       // These are the constraints used to validate the form
       var constraints = {
@@ -13,8 +11,8 @@ $(document).ready(function(e) {
             message: "^Enter name greater than 2 letters",
           },
           format: {
-            pattern: "[a-z]+",
-            message: "can only contain a-z"
+            pattern: "[a-zA-Z]+",
+            message: "can only contain letters"
           },
         },
         
@@ -25,8 +23,8 @@ $(document).ready(function(e) {
             message: "^Enter name greater than 2 letters",
           },
           format: {
-            pattern: "[a-z]+",
-            message: "can only contain a-z"
+            pattern: "[a-zA-Z]+",
+            message: "can only contain letters"
           },
         },
         
@@ -149,10 +147,49 @@ $(document).ready(function(e) {
         alert("Success!");
       }
   
-allResults();
+  // Preview Panel Creation - Default View
+  let iconAddUser = '<div id="addUserDesktopPanel"><a class="nav-link IconsPanel"><i class="fas fa-user-plus"></i></a></div>';
+  let iconAdminLocation = '<div><a class="nav-link IconsPanel"><i class="fas fa-users-cog"></i></a></div>';
+  let iconAdminDept = '<div><a class="nav-link IconsPanel"><i class="fas fa-map-marker-alt"></i></a></div>';
+  
+  $('#previewData').html(iconAddUser+iconAdminLocation+iconAdminDept);
+  
+  // New User Form in Desktop
+  
+  let newUserFormStart = '<form autocomplete="off" id="createProfileDesktop" name="createProfileDesktop" method="post">'
+    
+    let newFirstNameDiv = '<div class="mb-3 form-group"><label for="newFirstName" class="form-label">First name</label><input type="text" class="form-control" id="newFirstNameD" name="newFirstName" placeholder="First name" required><div class="col-sm-5 messages"></div></div>';
+    let newLastNameDiv = '<div class="mb-3 form-group"><label for="newLastName" class="form-label">Last name</label><input type="text" class="form-control" id="newLastNameD" name="newLastName" placeholder="Second name" required><div class="col-sm-5 messages"></div></div>';
+    let newEmailDiv = '<div class="mb-3 form-group"><label for="newEmailAddress" class="form-label">Email address</label><input type="email" class="form-control" id="newEmailAddressD" placeholder="name@email.com" name="newEmailAddress" required><div class="col-sm-5 messages"></div></div>';
+    let newDeptDiv = '<div class="mb-3 form-group"><label for="selectDeptD" class="form-label">Department</label><select class="form-select" aria-label="linkDepartmentSelect" name="selectDeptD" id="selectDeptD" required></select><div class="col-sm-5 messages"></div></div>';
+  
+    let saveNewUser = '<button type="button" class="btn btn-secondary" onClick="location.reload()" data-bs-dismiss="modal">Cancel</button>';
+    let cancelNewUser = '<button type="button" onClick="insertNewUserDesktop()" class="btn btn-primary">Save</button>';
+  
+  let newUserFormEnd = '</form>';
+  
+  
+  $('#addUserDesktopPanel').click(function() {
+    $('#previewData').html("");
+    $('#directoryData').removeClass('col-11');
+    $('#previewData').removeClass('col-1');
+    $('#directoryData').addClass('col-8');
+    $('#previewData').addClass('col-4');
+    $('#previewData').css("background-color", "white");
+    $('#previewData').html(newUserFormStart+newFirstNameDiv+newLastNameDiv+newEmailDiv+newDeptDiv+saveNewUser+cancelNewUser+newUserFormEnd); 
+    populateDeptOptions();
+  })
+  
+  
+  
+  
+  populateDeptOptions();
+  populateLocationOptionsMisc();
+  populateLocationforDeptOptions();
+  
+  
   
 });
-
 
 function allResults() {
   $.ajax({
@@ -168,11 +205,10 @@ function allResults() {
       var pID, firstName, lastName, dept, location, eMail, dID, lID;
       
       var previewID, previewFirstName, previewLastName, previewDept, previewLocation, previewEmail, previewDeptID;
+            
+    if ($(document).width() > 990) {
       
-
-      
-      
-    if ($(Document).width() > 990) {
+      //Table Data Panel
       
       let tableStart = '<table id="allDataTable" class="table table-striped table-hover col-8">';
         
@@ -182,14 +218,18 @@ function allResults() {
       let tHead3 = '<th scope="col" class="col"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(4)"></i><input onkeyup="searchDept()" id="searchDept" class="form-control colSearch" type="text" placeholder="Department"></th>';
       let tHead4 = '<th scope="col" class="col"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(5)"></i><input onkeyup="searchLoc()" id="searchLoc" class="form-control colSearch" type="text" placeholder="Location"></th>';
       let tHead5 = '<th scope="col" class="col-2"><i style="color: #ff4500" class="fas fa-sort float-start" onClick="sortTable(6)"></i><input onkeyup="searchEmail()" id="searchEmail" class="form-control colSearch" type="text" placeholder="Email"></th>';
-      let tHead6 = '<th scope="col" class="col-1"></th>'
+
       let tHeadEnd = "</tr></thead>";
       
       let tBody = "<tbody id='mainTable'></tbody>";
       
       let tableEnd = "</table>";
       
-      $('#directoryData').html(tableStart+tHeadStart+tHead1+tHead2+tHead3+tHead4+tHead5+tHead6+tHeadEnd+tBody+tableEnd);
+      $('#directoryData').html(tableStart+tHeadStart+tHead1+tHead2+tHead3+tHead4+tHead5+tHeadEnd+tBody+tableEnd);
+          
+
+      
+      //Loops Start to populate tables in either Desktop or Mobile
  
       for (var i=0; i<allData.length; i++) {
         let pID = allData[i]['id'];
@@ -201,25 +241,23 @@ function allResults() {
         let dID = allData[i]['departmentID'];
         let lID = allData[i]['locationID'];
         
-        //Table structure in variables    
+      //Table structure in variables    
         
         let trStart = "<tr class='clickRow'>";
-        let col1 = "<td class='d-none pID'>"+pID+"</td>";
+        let col1 = "<td class='d-none pID' id='userID'>"+pID+"</td>";
         let col2 = "<td class='d-none dID'>"+dID+"</td>";
         let col3 = "<td scope='row' class='fName'>"+firstName+"</td>";
         let col4 = "<td scope='row' class='lName'>"+lastName+"</td>";
         let col5 = "<td scope='row' class='deptName'>"+dept+"</td>";
         let col6 = "<td scope='row' class='locationName'>"+location+"</td>";
         let col7 = "<td scope='row' class='eAddress'><a style='color: #D03800;' href='#'>"+eMail+"</a></td>";
-        //let editBtn = "<td><a a class='text-primary' data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal'><i class='far fa-edit'></i></a> ";
-        let delBtn = "<td><a class='text-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></a></td>"
+        //let delBtn = "<td><button class='text-danger' onClick='deleteProfileDesktop()'><i class='far fa-trash-alt'></i></button></td>"
         let col8 = "<td class='d-none lID'>"+lID+"</td>";
         let trEnd = "</tr>";
         
-        $('#mainTable').append(trStart+col1+col2+col3+col4+col5+col6+col7+delBtn+col8+trEnd);
+        $('#mainTable').append(trStart+col1+col2+col3+col4+col5+col6+col7+col8+trEnd);
       }
-        
-         }
+    }
       
     else {
         
@@ -229,6 +267,7 @@ function allResults() {
         
       let tableEnd = "</table>";
       
+      $('#directoryData').removeClass('col-8');
       $('#directoryData').html(tableStart+tBody+tableEnd);
         
       for (var j=0; j<allData.length; j++) {
@@ -240,10 +279,10 @@ function allResults() {
         let eMail = allData[j]['email'];
         let dID = allData[j]['departmentID'];
         let lID = allData[j]['locationID'];
-        //Table structure in variables
+      //Table structure in variables
         
-        let trStart = "<tr class='clickRowMobile mobileRows'>";
-        //col1 - col5 are hidden and included for data use only
+        let trStart = "<tr class='clickRow mobileRows'>";        
+      //col1 - col5 are hidden and included for data use only
         let col1 = "<td class='d-none pID'>"+pID+"</td>";
         let col2 = "<td class='d-none dID'>"+dID+"</td>";
         let col3 = "<td class='d-none lID'>"+lID+"</td>";
@@ -257,23 +296,26 @@ function allResults() {
         
         $('#mainTable').append(trStart+col1+col2+col3+col4+col5+col6+col7+col8+trEnd);
       }
-}
+    }
 
-      
       // Make rows clickable to show preview and populate edit modal 
         $(".clickRow").click(function() {
-          $('.previewTable').html("");
           
+        //Clear exisiting data
+          $('#previewData').html("");
+          $('#directoryData').removeClass('col-11');
+          $('#previewData').removeClass('col-1');
+          $('#directoryData').addClass('col-8');
+          $('#previewData').addClass('col-4');
+          $('#previewData').css("background-color", "white");
           
-          $('#createProfileDesktop').removeClass('showMe');
-          $('#createProfileDesktop').addClass('hideMe');
+          populateDeptOptions();
+          populateLocationOptionsMisc();
+          
 
-          $('#editProfileDesktop').removeClass('hideMe');
-          $('#editProfileDesktop').addClass('showMe');
-          
+        //Search existing for requested data
           var row = $(this).closest("tr");
           
-        //Use data already called opposed to invoking another PHP routine & DB call 
           let previewID = row.find(".pID").text();
           let previewFirstName = row.find(".fName").text();
           let previewLastName = row.find(".lName").text();
@@ -282,43 +324,43 @@ function allResults() {
           let previewEmail = row.find(".eAddress").text();
           let previewDeptID = row.find(".dID").text();
           let previewLocationID = row.find(".lID").text();
+                    
+        //Desktop Edit User Form Creation on clicking row in table
           
-        //Ready code for edit modal for MOBILE         
+          let editFormStart = '<form method="post">';
+          
+          let editIDDesktop = '<div class="mb-3 d-none" id="userEditIDDesktop">'+previewID+'</div>';
+          let editFirstNameDiv = '<div class="mb-3 form-group"><label for="editFirstNameDesktop" class="form-label">Edit First Name</label><input type="text" class="form-control" id="editFirstNameDesktop" name="editFirstNameDesktop" placeholder="First name" value='+previewFirstName+' required><div class="col-sm-5 messages"></div></div>';
+          let editLastNameDiv = '<div class="mb-3 form-group"><label for="editLastNameDesktop" class="form-label">Edit Last name</label><input type="text" class="form-control" id="editLastNameDesktop" name="editLastNameDesktop" placeholder="Second name" value='+previewLastName+' required><div class="col-sm-5 messages"></div></div>';
+          let editEmailDiv = '<div class="mb-3 form-group"><label for="editEmailAddressDesktop" class="form-label">Edit Email address</label><input type="email" class="form-control" id="editEmailAddressDesktop" placeholder="name@email.com" name="editEmailAddressDesktop" value='+previewEmail+' required><div class="col-sm-5 messages"></div></div>';
+          let editDeptDiv = '<div class="mb-3 form-group"><label for="editDeptDesktop" class="form-label">Change Department</label><select class="form-select" aria-label="editDeptDesktop" name="editDeptDesktop" id="editDeptDesktop" value="" required></select><div class="col-sm-5 messages"></div></div>';
+          
+          let saveBtn = '<div><button type="button" onClick="editProfileDesktop()" class="btn btn-primary">Save</button>';
+          let cancelBtn = '<button type="button" class="btn btn-secondary" onClick="location.reload()" data-bs-dismiss="modal">Cancel</button></div>';
+  
+          let editFormEnd = '</form>';
+          
+          let deleteDiv = '<div><button class="text-danger" onClick="deleteProfileDesktop()"><i class="far fa-trash-alt"></i></button></div>';
+
+         $('#previewData').html(editFormStart+editIDDesktop+editFirstNameDiv+editLastNameDiv+editEmailDiv+editDeptDiv+saveBtn+cancelBtn+editFormEnd+deleteDiv);
+                        
+        //Use data already called opposed to invoking another PHP routine & DB call 
+
+        /*Ready code for edit modal for MOBILE         
           $('#userEditID').html(previewID);
           $('#editFirstName').val(previewFirstName);
           $('#editLastName').val(previewLastName);
           $('#editEmailAddress').val(previewEmail);
           $('#editDept').val(previewDeptID);
+        */
           
-        //Ready code for edit panel for Desktop         
+        /*Ready code for edit panel for Desktop         
           $('#userEditIDDesktop').html(previewID);
           $('#editFirstNameDesktop').val(previewFirstName);
           $('#editLastNameDesktop').val(previewLastName);
           $('#editEmailAddressDesktop').val(previewEmail);
-          $('#editDeptDesktop').val(previewDeptID);
-          
-          $('#editLocDesktop').val(previewLocationID);
-        
-              
-        /*Table form for Desktop Edit Profile in variables
-          let formStart = "<form id='editProfileDesktop' name='editProfileDesktop' method='post'>";
-          let row1 = "<tr><td class='d-none' id='userID'>"+previewID+"</td></tr>";
-          let row2 = "<tr><td scope='row'>Edit User</tr></td>";
-          let row3 = "<tr><td scope='row'>First Name</td><td><input type='text' class='form-control' id='editFirstNameDesktop' name='editFirstNameDesktop' placeholder='Edit First Name' value='' required><div class='col-sm-5 messages'></div></td></tr>";
-          let row4 = "<tr><td scope='row'>Last Name</td><td><input type='text' class='form-control' id='editLastNameDesktop' name='editLastNameDesktop' placeholder='Edit Second Name' value'' required><div class='col-sm-5 messages'></div></td></tr>";
-          let row5 = "<tr><td scope='row'>Email</td><td><input type='email' class='form-control' id='editEmailAddressDesktop' name='editEmailAddressDesktop' placeholder='Edit eMail Address' value'' required><div class='col-sm-5 messages'></div></td></tr>";
-          let row6 = "<tr><td scope='row'>Department</td><td><select class='form-select' aria-label='editDeptDesktop' name='editDeptDesktop' id='editDeptDesktop' required></select><div class='col-sm-5 messages'></div></td></tr>";
-          let row7 = "<tr><td scope='row'>Location</td><td>previewholder</td></tr>";
-          
-          let editBtn = "<tr><td></td><td><button data-target='#editUserModal' data-bs-toggle='modal' data-bs-target='#editUserModal' class='btn btn-success'><i class='far fa-edit'></i></button> ";
-          let delBtn = "<button type='button' class='btn btn-danger' onClick='deleteProfile()'><i class='far fa-trash-alt'></i></button></td></tr>"
-          let formEnd = "</form>";
-          
-        //Preview Table
-          //$('.previewDiv').append(formStart+row1+row2+row3+row4+row5+row6+row7+editBtn+delBtn+formEnd);
-          
-          */
-                    
+
+        */           
         });      
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -362,7 +404,6 @@ $('.allLocations').on('click', function(e) {
   allLocationsTable()
 })
 
-
 function allDeptTable() {
 	$.ajax({
 	url: './php/getAllDepartments.php',
@@ -392,9 +433,6 @@ $('.previewPanelAdminDept').on('click', function(e) {
   allDeptTable()
 })
 
-
-
-
 function populateDeptOptions(id, name) {
 	$.ajax({
 	url: './php/getAllDepartments.php',
@@ -407,6 +445,9 @@ function populateDeptOptions(id, name) {
       var deptDropdownNewUser = $('#selectDept');
       deptDropdownNewUser.empty();
       
+      var deptDropdownNewUserDesktop = $('#selectDeptD');
+      deptDropdownNewUserDesktop.empty();
+      
       var deptDropdownEditUser = $('#editDept');
       deptDropdownEditUser.empty();
       
@@ -417,6 +458,7 @@ function populateDeptOptions(id, name) {
         deptDropdownNewUser.append($('<option value=' + value.id + '>' + value.name +'</option>'));
         deptDropdownEditUser.append($('<option value=' + value.id + '>' + value.name +'</option>'));
         deptDropdownEditUserDesktop.append($('<option value=' + value.id + '>' + value.name +'</option>'));
+        deptDropdownNewUserDesktop.append($('<option value=' + value.id + '>' + value.name +'</option>'));
       });
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -448,7 +490,6 @@ function populateLocationOptionsMisc() {
   });
 }
 
-
 function populateLocationforDeptOptions() {
 	$.ajax({
 	url: './php/getAllLocations.php',
@@ -472,6 +513,21 @@ function populateLocationforDeptOptions() {
   });
 }
 
+function insertNewUserMobile() {
+    var firstName = $('#newFirstName').val();
+    var lastName = $('#newLastName').val();
+    var email = $('#newEmailAddress').val();
+    var departmentId = $('#selectDept').val();
+    insertProfile (firstName, lastName, email, departmentId);
+}
+
+function insertNewUserDesktop() {
+    var firstName = $('#newFirstNameD').val();
+    var lastName = $('#newLastNameD').val();
+    var email = $('#newEmailAddressD').val();
+    var departmentId = $('#selectDeptD').val();
+    insertProfile (firstName, lastName, email, departmentId);
+}
 
 function insertProfile (firstName, lastName, email, departmentId) {
 	$.ajax({
@@ -497,16 +553,9 @@ function insertProfile (firstName, lastName, email, departmentId) {
   });
 }
 
-function insertNewUser() {
-    var firstName = $('#newFirstName').val();
-    var lastName = $('#newLastName').val();
-    var email = $('#newEmailAddress').val();
-    var departmentId = $('#selectDept').val();
-    insertProfile (firstName, lastName, email, departmentId);
-}
-
-function deleteProfile() {
-  var profileID = $('#userID').text();
+function deleteProfileDesktop() {
+  var profileID = $('#userEditIDDesktop').text();
+  //console.log(profileID);
   deleteProfileAJAX (profileID);
 }
 
@@ -522,6 +571,7 @@ function deleteProfileAJAX (profileID) {
 	success:
     function() {
       allResults();
+      console.log('phped');
 
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -530,29 +580,20 @@ function deleteProfileAJAX (profileID) {
   });
 }
 
-// Edit Profile Mobile/Modal Listener
-
-$('#editProfile').on('submit', function(e) {
-  e.preventDefault();  
-  var previewID = $('#userEditID').text();
-  var previewFirstName = $('#editFirstName').val();
-  var previewLastName = $('#editLastName').val();
-  var previewEmail = $('#editEmailAddress').val();
-  var previewDeptID = $('#editDept').val();
-  editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
-});
-
 // Edit Profile Desktop Listener
 
-$('#editProfileDesktop').on('submit', function(e) {
-  e.preventDefault();  
+function editProfileDesktop() {
+  
   var previewID = $('#userEditIDDesktop').text();
   var previewFirstName = $('#editFirstNameDesktop').val();
   var previewLastName = $('#editLastNameDesktop').val();
   var previewEmail = $('#editEmailAddressDesktop').val();
   var previewDeptID = $('#editDeptDesktop').val();
+  
+  console.log(previewID, previewEmail);
+  
   editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
-});
+}
 
 function editProfileAJAX(previewID, previewFirstName, previewLastName, previewDept, previewEmail) {
 	$.ajax({
@@ -564,14 +605,13 @@ function editProfileAJAX(previewID, previewFirstName, previewLastName, previewDe
     firstName1: previewFirstName,
     lastName1: previewLastName,
     email1: previewEmail,
-    departmentId1: previewDept
+    departmentId1: previewDept,
+
         },
     
 	success:
     function() {
-      allResults();
-      $('#editUserModal').modal('hide');
-
+      location.reload();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       alert(':' + textStatus +' : '+ errorThrown +' || Please press F12 to access Network Log for further info');
@@ -583,14 +623,6 @@ $('#createLocation').on('submit', function(e) {
   e.preventDefault();  
   var locationID = $('#newLocationForm').val();
   newLocationAJAX(locationID);
-})
-
-$('#addUserDesktop').on('click', function() {
-  $('.previewTable').html("");
-  $('#editProfileDesktop').removeClass('showMe');
-  $('#editProfileDesktop').addClass('hideMe');
-  $('#createProfileDesktop').removeClass('hideMe');
-  $('#createProfileDesktop').addClass('showMe');
 })
 
 
@@ -815,22 +847,3 @@ function sortTable(n) {
   }
 }
 
-/*
-var xxx = function(xxx) {
-	$.ajax({
-	url: './php/.php',
-	dataType: "json",
-  data: {xxx: xxx},
-	success: 
-		function(result) {
-      
-          
-
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      alert(':' + textStatus +' : '+ errorThrown +' || Please press F12 to access Network Log for further info');
-    },
-  });
-}
-
-*/
