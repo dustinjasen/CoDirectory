@@ -1,112 +1,89 @@
 @charset "utf-8";
 /* CSS Document */
-
 .navLogo {
   color: orangered!important;
 }
-
 .messages {
   font-size: 0.8rem;
   color: darkred;
   width: 30vw;
 }
-
 .colSearch {
-  border: none;
+  border: none!important;
   width: 75%;
   font-size: 1rem;
-  }
-
+}
 .colSearchMobile {
-  border: none;
+  border: none!important;
   width: 100%;
   font-size: 1rem;
-  }
-
-
+}
 .colSearch:focus {
   border: none!important;
   box-shadow: inset 0 1px 1px white, 0 0 8px white;
   color: black;
-  }
-
-
+}
 .mobileOnly {
   display: none;
 }
-
 .previewPanelHeads {
   text-align: center;
   font-size: 1.2rem;
 }
-
 .selectedTR {
   background-color: blue;
 }
-
 .NavMargin {
   margin-bottom: 4%;
 }
-
 .iconsBottom {
   font-size: 1.5rem;
   color: #ff4500;
   padding: 0rem 2rem;
 }
-
 #previewData {
-  background-color: #ffece6;
+  background-color: whitesmoke;
   position: fixed;
   right: 0;
-  height: 100%;
   overflow-y: scroll;
-  z-index: 1000;
+  max-height: 90%;
+  height: auto;
+  border-top: 3px solid #ff4500;
+  border-left: 3px solid #ff4500;
+  border-bottom: 3px solid #ff4500;
+  border-bottom-left-radius: 1rem;
 }
-
 #directoryData {
   background-color: #fff;
+  max-height: 100%;
+  min-height: 100%;
+  height: 100%;
+  font-size: 0.9rem!important;
 }
-
 .mTop {
   margin-top: 55px;
 }
-
 .createContactHeader {
-  background-image: linear-gradient(to right, #ff4500, #ffece6);
+  background-color: #212529;
   vertical-align: middle;
   height: 50px;
   line-height: 50px;
   width: 100%;
-  color: white;
-  font-size: 1.2rem;
+  color: #ff4500;
+  font-size: 1.1rem;
   text-align: left;
   padding-left: 1rem;
   margin: 0;
   font-weight: bold;
 }
-
-.DeptAdminHeader {
-  background-image: linear-gradient(to right, #6BE400, #e1ffc6);
+.DeptAdminHeader, .LocationAdminHeader {
+  background-color: #212529;
   height: 50px;
   line-height: 50px;
   min-width: 100%;
-  color: whitesmoke;
-  font-size: 1.2rem;
+  color: #ff4500;
+  font-size: 1.1rem;
   text-align: left;
-  padding-left: 0.5rem;
-  margin: 0;
-  font-weight: bold;
-}
-
-.LocationAdminHeader {
-  background-image: linear-gradient(to right, #0a64a4, #d3ebfc);
-  height: 50px;
-  line-height: 50px;
-  min-width: 100%;
-  color: whitesmoke;
-  font-size: 1.2rem;
-  text-align: left;
-  padding-left: 0.5rem;
   margin: 0;
   font-weight: bold;
 }
@@ -115,122 +92,266 @@
   font-size: 0.8rem;
 }
 
-#createProfileDesktop, #editUserForm, #createDept {
+#createProfileDesktop, #editUserForm, #createDept, #createLocation, #editLocation, #editDepartment {
   padding: 1.1rem;
   background-color: inherit;
   border: 1px solid #fff;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-  overflow-y: scroll;
-  z-index: 1000;
+  font-size: 0.9rem!important;
 }
-
 #deptAdminTable {
   padding: 1.1rem;
-  background-color: #e1ffc6;
+  background-color: whitesmoke;
   overflow-y: scroll;
-  z-index: 1000;
+  font-size: 0.9rem!important;
 }
-
 #locationAdminTable {
   padding: 1.1rem;
-  background-color: #f0f8fe;
+  background-color: whitesmoke;
   overflow-y: scroll;
-  z-index: 1000;
+  font-size: 0.9rem!important;
+}
+
+tr:hover {
+  background-color: #ff4500!important;
+  color: white!important;
+  cursor: pointer!important;
+}
+
+th:hover {
+  background-color: #fff!important;
+  color: black!important;
+  cursor: pointer!important;
+}
+
+.noStyle:hover {
+  background-color: #fff!important;
+  color: black!important;
+  cursor: pointer!important;
+}
+
+tr:hover a {
+  background-color: #ff4500!important;
+  color: white!important;
 }
 
 input {
   font-size: 0.9rem!important;
+  border: 2px solid gray!important;
 }
 
+input:focus {
+  font-size: 0.9rem!important;
+  box-shadow: inset 0 1px 1px #ff4500, 0 0 8px #ff4500!important;
+  border: none!important;
+}
 select {
   font-size: 0.9rem!important;
+  border: 2px solid gray!important;
 }
-
+select:focus {
+  font-size: 0.9rem!important;
+  box-shadow: inset 0 1px 1px #ff4500, 0 0 8px #ff4500!important;
+  border: none!important; 
+}
 .saveButton {
   background-color: #ff4500;
   color: white;
   margin: 1rem;
-  font-size: 0.9rem!important
+  font-size: 0.9rem!important;
 }
-
 .saveButton:hover {
   background-color: white;
   color: #ff4500;
   border: 1px solid #ff4500;
-  font-size: 0.9rem!important
 }
-
 .cancelButton {
   background-color: inherit;
   color: #212529;
   border: 1px solid #212529;
   font-size: 0.9rem!important
 }
-
 .cancelButton:hover {
   background-color: #212529;
-  border: 1px solid #212529;
   color: white;
-  font-size: 0.9rem!important
 }
-
-.deleteButton  {
+.deleteButton {
   background-color: inherit;
   vertical-align: middle;
-  color: #212529;
+  color: #fff;
   font-size: 1rem!important;
   height: 50px;
   line-height: 25px;
 }
-
 .deleteButton:hover {
-  background-color: darkred;
+  background-color: red;
+}
+
+.deleteButtonTwo {
+  background-color: inherit;
+  vertical-align: middle;
+  color: #000;
+  font-size: 1rem!important;
+  float: right;
+}
+.deleteButtonTwo:hover {
+  background-color: red;
+}
+
+.addButton {
+  background-color: inherit;
   vertical-align: middle;
   color: #fff;
   font-size: 1rem!important;
   height: 50px;
   line-height: 25px;
 }
-
-.addButton  {
-  background-color: greenyellow;
-  vertical-align: middle;
-  color: #212529;
-  font-size: 1rem!important;
-  height: 50px;
-  line-height: 25px;
-}
-
 .addButton:hover {
-  background-color: green;
+  color: #ff4500;
+}
+.exitButton {
+  background-color: inherit;
   vertical-align: middle;
   color: #fff;
   font-size: 1rem!important;
   height: 50px;
   line-height: 25px;
 }
+.exitButton:hover {
+  vertical-align: middle;
+  color: darkred;
+  font-size: 1rem!important;
+  height: 50px;
+  line-height: 25px;
+}
+#successIcon {
+  text-align: center;
+  font-size: 2.5rem;
+  color: green;
+  background-color: lightgreen;
+  }
+#successText {
+  text-align: center;
+  font-size: 1.2rem;
+  color: green;
+  background-color: lightgreen;
+}
+.successBox {
+  position: absolute;
+  top: 0;
+  background-color: lightgreen;
+  padding: 1rem;
+  height: auto;
+  padding-top: 10%;
+}
 
+#failIcon {
+  text-align: center;
+  color: darkred;
+  font-size: 2.5rem;
+  background-color: lightcoral;
+}
+#failText {
+  text-align: center;
+  color: darkred;
+  font-size: 1.2rem;
+  background-color: lightcoral;
+}
+.failBox{
+  position: absolute;
+  top: 0;
+  background-color: lightcoral;
+  padding: 1rem;
+  height: auto;
+  padding-top: 10%;
+}
 
+#deleteSuccessText {
+  text-align: center;
+  color: orangered;
+  font-size: 1.2rem;
+  background-color: #FFAC43;
+}
+#deleteSuccessIcon {
+  text-align: center;
+  color: orangered;
+  font-size: 2.5rem;
+  background-color: #FFAC43;
+}
+
+.deleteSuccessBox {
+  position: absolute;
+  top: 0;
+  background-color: #FFAC43;
+  padding: 1rem;
+  height: auto;
+  padding-top: 10%;
+}
+
+#staticBackdrop {
+  border: 3px solid #ff4500;
+}
+
+.modalHead {
+  background-color: #ff4500;
+  color: white;
+}
+
+.modalBody {
+  background-color: #fff;
+  text-align: left;
+}
+
+.modalFoot {
+  background-color: #fff;
+}
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #fff #000000;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #000000;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
 
 /* Mobile CSS */
-
 @media only screen and (max-width: 990px) {
   .messages {
     min-width: 90vw;
     max-width: 90vw;
     left: 0;
   }
-  
   .iconsBottom {
-  text-align: center;
-  font-size: 1.3rem;
-  color: #ff4500;
-  padding: 0rem 1rem;
+    text-align: center;
+    font-size: 1.3rem;
+    color: #ff4500;
+    padding: 0rem 1rem;
   }
   #previewData {
     height: auto;
+    overflow-y: scroll;
+    max-height: 80vh;
   }
-  
+  .mTop {
+    margin-top: 55px;
+    margin-bottom: 55px;
+  }
+  .DeptAdminHeader, .LocationAdminHeader, .createContactHeader {
+    font-size: 1rem;
+  }
 }
-

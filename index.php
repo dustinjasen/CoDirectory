@@ -10,8 +10,7 @@
   <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <!-- Font-Awesome *************-->
   <script src="https://kit.fontawesome.com/979209c926.js" crossorigin="anonymous"></script>
-  <!-- Animate ******************-->
-  <link href="css/animate.min.css" rel="stylesheet" type="text/css">
+
   <!-- Jquery JS ****************-->
   <script src="js/jquery-3.6.0.min.js" type="text/javascript"></script>
   <!-- UnderScore JS **********  -->
@@ -20,30 +19,33 @@
   <!-- Our Style ****************-->
   <link href="css/theCRMStyle.css" rel="stylesheet" type="text/css">
 
-  <title>User Directory</title>
+  <title>Company Directory</title>
   <link rel="shortcut icon" type="image/png" href="favicon.ico">
 
 </head>
 
 <body>
-  
+
   <div id="navBarRender" class="container-fluid"></div>
 
   <div class="container-fluid mTop">
     <div class="row">
-      <div class="col-8" id="directoryData"></div>
+      <div class="col-8 g-0" id="directoryData"></div>
       <div class="col-4 g-0" id="previewData"></div>
     </div>
   </div>
+  
+  <div id="confirmModal"></div>
 
-    <!-- BootStrap JS *************-->
-    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
+  <!-- BootStrap JS *************-->
+  <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
 
-    <!-- Validate JS **************-->
-    <script src="js/validate.min.js" type="text/javascript"></script>
+  <!-- Validate JS **************-->
+  <script src="js/validate.min.js" type="text/javascript"></script>
 
-    <!-- Our Script ***************-->
-    <script src="js/theCRMScript.js" type="text/javascript"></script>
+
+  <!-- Our Script ***************-->
+  <script src="js/theCRMScript.js" type="text/javascript"></script>
 
 </body>
 
