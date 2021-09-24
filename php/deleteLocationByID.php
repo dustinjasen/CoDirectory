@@ -33,8 +33,34 @@
 
 	}	
 
-	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
+	$deleteLocationID = $_REQUEST['deleteLocationID'];
+
+	$checkQuery = "SELECT COUNT(name) as departments FROM department d WHERE d.locationID = $deleteLocationID";
+	$checkResult = $conn->query($checkQuery);
+
+	$data = [];
+
+	while ($row = mysqli_fetch_assoc($checkResult)) {
+
+		array_push($data, $row);
+
+	}
+
+	$departments = $data[0]['departments'];
+
+	if ($departments > 0) {
+
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "delete denied";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
+	}
 
 	$query = $conn->prepare('DELETE FROM location WHERE id = ?');
 	

@@ -59,7 +59,7 @@ function populateLocationOptionsMisc() {
   });
 }
 
-function populateLocationforDeptOptions() {
+function populateLocationforDeptOptions(deptLocationID) {
   $.ajax({
     url: './php/getAllLocations.php',
     dataType: "json",
@@ -77,6 +77,8 @@ function populateLocationforDeptOptions() {
         locationNewDept.append($('<option value=' + value.id + '>' + value.name + '</option>'))
         editDepartmentLocation.append($('<option value=' + value.id + '>' + value.name + '</option>'))
       });
+      
+      $('#editDepartmentLocation').val(deptLocationID);
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -170,7 +172,7 @@ function allResults() {
         $('#previewData').html("");
         $('#directoryData').removeClass('col-8');
         $('#previewData').removeClass('col-4');
-
+        
         //Top Nav        
         let navBarStartTop = '<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark fixed-top">';
         let divOneTop = '<div class="container-fluid">';
@@ -238,137 +240,7 @@ function allResults() {
       $(".clickRow").click(function () {
         var row = $(this).closest("tr");
         var previewID = row.find(".pID").text();
-        var previewFirstName = row.find(".fName").text();
-        var previewLastName = row.find(".lName").text();
-        var previewDept = row.find(".deptName").text();
-        var previewLocation = row.find(".locationName").text();
-        var previewEmail = row.find(".eAddress").text();
-        var previewDeptID = row.find(".dID").val();
-        var previewLocationID = row.find(".lID").text();
-
-        if ($(document).width() > 990) {
-
-          $('#previewData').html("");
-
-          populateDeptOptions();
-
-          //Desktop Edit User Form Creation on clicking row in table
-          let heading = '<div class="createContactHeader">Edit Contact<button class="btn deleteButton float-end" id="deleteProfilebtn"><i class="far fa-trash-alt"></i></button></div>';
-          let editFormStart = '<form id="editUserForm" method="post">';
-
-          let editIDDesktop = '<div class="mb-3 d-none" id="userEditIDDesktop">' + previewID + '</div>';
-          let editFirstNameDiv = '<div class="mb-3 form-group"><label for="editFirstNameDesktop" class="labels">Edit First Name</label><input type="text" class="form-control" id="editFirstNameDesktop" name="editFirstNameDesktop" placeholder="" value="' + previewFirstName + '" required><div class="col-sm-5 messages"></div></div>';
-          let editLastNameDiv = '<div class="mb-3 form-group"><label for="editLastNameDesktop" class="labels">Edit Last name</label><input type="text" class="form-control" id="editLastNameDesktop" name="editLastNameDesktop" placeholder="" value="' + previewLastName + '" required><div class="col-sm-5 messages"></div></div>';
-          let editEmailDiv = '<div class="mb-3 form-group"><label for="editEmailAddressDesktop" class="labels">Edit Email address</label><input type="email" class="form-control" id="editEmailAddressDesktop" placeholder="text@emailaddress.com" name="editEmailAddressDesktop" value=' + previewEmail + ' required><div class="col-sm-5 messages"></div></div>';
-          let editDeptDiv = '<div class="mb-3 form-group"><label for="editDeptDesktop" class="labels">Change Department from ' + previewDept + '</label><select class="form-select" aria-label="editDeptDesktop" name="editDeptDesktop" id="editDeptDesktop" value="' + previewDeptID + '"></select><div class="col-sm-5 messages"></div></div>';
-
-          let saveBtn = '<div><button type="submit" class="btn saveButton">Save</button>';
-          let cancelBtn = '<button type="button" class="btn cancelButton" onClick="cancelButton()" data-bs-dismiss="modal">Cancel</button></div>';
-
-          let editFormEnd = '</form>';
-
-          $('#previewData').html(heading + editFormStart + editIDDesktop + editFirstNameDiv + editLastNameDiv + editEmailDiv + editDeptDiv + saveBtn + cancelBtn + editFormEnd);
-
-          $("#editUserForm").submit(function (e) {
-            e.preventDefault();
-            var previewID = $('#userEditIDDesktop').text();
-            var previewFirstName = $('#editFirstNameDesktop').val();
-            var previewLastName = $('#editLastNameDesktop').val();
-            var previewEmail = $('#editEmailAddressDesktop').val();
-            var previewDeptID = $('#editDeptDesktop').val();
-            editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
-          })
-
-          $("#deleteProfilebtn").click(function (e) {
-            e.preventDefault();
-
-            var profileID = $('#userEditIDDesktop').text();
-            var previewFirstName = $('#editFirstNameDesktop').val();
-            //var deleteYes = deleteProfileAJAX(profileID);
-
-            let modalDiv = '<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">';
-            let modalHead = '<div class="modal-header modalHead"><h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>';
-            let modalBody = '<div class="modal-body modalBody">' + previewFirstName + '<span class="d-none" id="profileID">' + profileID + '</span></div>';
-            let modalFoot = '<div class="modal-footer modalFoot"><button type="button" class="btn cancelButton" data-bs-dismiss="modal">Cancel</button>';
-            let acceptBtn = '<button type="button" id="acceptDelete" class="btn saveButton">Understood</button>';
-            let closeDivs = '</div></div></div></div>';
-
-            $('#confirmModal').html(modalDiv + modalHead + modalBody + modalFoot + acceptBtn + closeDivs);
-
-            $('#staticBackdrop').modal('show');
-
-            $("#acceptDelete").click(function (e) {
-              e.preventDefault();
-              let profileID = $('#profileID').text();
-              deleteProfileAJAX(profileID);
-              $('#staticBackdrop').modal('hide');
-            })
-          })
-
-        } else {
-
-          $('#previewData').html("");
-          $('#directoryData').removeClass('col-8');
-          $('#previewData').removeClass('col-4');
-          $('#previewData').addClass('col-10');
-
-          populateDeptOptions();
-          populateLocationOptionsMisc();
-
-          let heading = '<div class="createContactHeader">Edit Contact<button class="btn deleteButton float-end" id="deleteProfilebtn"><i class="far fa-trash-alt"></i></button></div>';
-          let editFormStart = '<form id="editUserForm" method="post">';
-
-          let editIDDesktop = '<div class="mb-3 d-none" id="userEditIDDesktop">' + previewID + '</div>';
-          let editFirstNameDiv = '<div class="mb-3 form-group"><label for="editFirstNameDesktop" class="labels">Edit First Name</label><input type="text" class="form-control" id="editFirstNameDesktop" name="editFirstNameDesktop" placeholder="First name" value="' + previewFirstName + '" required><div class="col-sm-5 messages"></div></div>';
-          let editLastNameDiv = '<div class="mb-3 form-group"><label for="editLastNameDesktop" class="labels">Edit Last name</label><input type="text" class="form-control" id="editLastNameDesktop" name="editLastNameDesktop" placeholder="Second name" value="' + previewLastName + '" required><div class="col-sm-5 messages"></div></div>';
-          let editEmailDiv = '<div class="mb-3 form-group"><label for="editEmailAddressDesktop" class="labels">Edit Email address</label><input type="email" class="form-control" id="editEmailAddressDesktop" placeholder="name@email.com" name="editEmailAddressDesktop" value=' + previewEmail + ' required><div class="col-sm-5 messages"></div></div>';
-          let editDeptDiv = '<div class="mb-3 form-group"><label for="editDeptDesktop" class="labels">Change Department from ' + previewDept + '</label><select class="form-select" aria-label="editDeptDesktop" name="editDeptDesktop" id="editDeptDesktop" value="' + previewDeptID + '"></select><div class="col-sm-5 messages"></div></div>';
-
-          let saveBtn = '<div><button type="submit" class="btn saveButton">Save</button>';
-          let cancelBtn = '<button type="button" class="btn cancelButton" onClick="cancelButton()" data-bs-dismiss="modal">Cancel</button></div>';
-
-          let editFormEnd = '</form>';
-
-
-          $('#previewData').html(heading + editFormStart + editIDDesktop + editFirstNameDiv + editLastNameDiv + editEmailDiv + editDeptDiv + saveBtn + cancelBtn + editFormEnd);
-
-          $("#editUserForm").submit(function (e) {
-            e.preventDefault();
-            var previewID = $('#userEditIDDesktop').text();
-            var previewFirstName = $('#editFirstNameDesktop').val();
-            var previewLastName = $('#editLastNameDesktop').val();
-            var previewEmail = $('#editEmailAddressDesktop').val();
-            var previewDeptID = $('#editDeptDesktop').val();
-            editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
-          })
-
-          $("#deleteProfilebtn").click(function (e) {
-            e.preventDefault();
-
-            var profileID = $('#userEditIDDesktop').text();
-            var previewFirstName = $('#editFirstNameDesktop').val();
-            //var deleteYes = deleteProfileAJAX(profileID);
-
-            let modalDiv = '<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">';
-            let modalHead = '<div class="modal-header modalHead"><h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>';
-            let modalBody = '<div class="modal-body modalBody">' + previewFirstName + '<span class="d-none" id="profileID">' + profileID + '</span></div>';
-            let modalFoot = '<div class="modal-footer modalFoot"><button type="button" class="btn cancelButton" data-bs-dismiss="modal">Cancel</button>';
-            let acceptBtn = '<button type="button" id="acceptDelete" class="btn saveButton">Understood</button>';
-            let closeDivs = '</div></div></div></div>';
-
-            $('#confirmModal').html(modalDiv + modalHead + modalBody + modalFoot + acceptBtn + closeDivs);
-
-            $('#staticBackdrop').modal('show');
-
-            $("#acceptDelete").click(function (e) {
-              e.preventDefault();
-              let profileID = $('#profileID').text();
-              deleteProfileAJAX(profileID);
-              $('#staticBackdrop').modal('hide');
-            })
-          })
-
-        }
+        getUserByID(previewID);
       });
 
       // Add User Admin Panel
@@ -466,6 +338,101 @@ function allResults() {
     },
     error: function (jqXHR, textStatus, errorThrown) {
       alert(':' + textStatus + ' : ' + errorThrown + ' || Please press F12 to access Network Log for further info');
+    },
+  });
+}
+
+function getUserByID(previewID) {
+  $.ajax({
+    url: './php/getPersonnelByID.php',
+    type: 'POST',
+    dataType: "json",
+    data: {
+      id: previewID,
+    },
+
+    success: function (result) {
+
+      var userData = result.data.personnel;
+      var deptOptionData = result.data.department;
+
+      var previewUserID = userData['0'].id;
+      var previewFirstName = userData['0'].firstName;
+      var previewLastName = userData['0'].lastName;
+      var previewEmail = userData['0'].email;
+      var previewDeptID = userData['0'].departmentID;
+
+        $('#previewData').html("");
+
+        //Desktop Edit User Form Creation on clicking row in table
+        let heading = '<div class="createContactHeader">Edit Contact<button class="btn deleteButton float-end" id="deleteProfilebtn"><i class="far fa-trash-alt"></i></button></div>';
+        let editFormStart = '<form id="editUserForm" method="post">';
+
+        let editIDDesktop = '<div class="mb-3 d-none" id="userEditIDDesktop">' + previewUserID + '</div>';
+        let editFirstNameDiv = '<div class="mb-3 form-group"><label for="editFirstNameDesktop" class="labels">Edit First Name</label><input type="text" class="form-control" id="editFirstNameDesktop" name="editFirstNameDesktop" placeholder="" value="' + previewFirstName + '" required><div class="col-sm-5 messages"></div></div>';
+        let editLastNameDiv = '<div class="mb-3 form-group"><label for="editLastNameDesktop" class="labels">Edit Last name</label><input type="text" class="form-control" id="editLastNameDesktop" name="editLastNameDesktop" placeholder="" value="' + previewLastName + '" required><div class="col-sm-5 messages"></div></div>';
+        let editEmailDiv = '<div class="mb-3 form-group"><label for="editEmailAddressDesktop" class="labels">Edit Email address</label><input type="email" class="form-control" id="editEmailAddressDesktop" placeholder="text@emailaddress.com" name="editEmailAddressDesktop" value=' + previewEmail + ' required><div class="col-sm-5 messages"></div></div>';
+        let editDeptDiv = '<div class="mb-3 form-group"><label for="editDeptDesktop" class="labels">Change Department</label><select class="form-select" aria-label="editDeptDesktop" name="editDeptDesktop" id="editDeptDesktop" value=""></select><div class="col-sm-5 messages"></div></div>';
+
+        let saveBtn = '<div><button type="submit" class="btn saveButton">Save</button>';
+        let cancelBtn = '<button type="button" class="btn cancelButton" onClick="cancelButton()" data-bs-dismiss="modal">Cancel</button></div>';
+
+        let editFormEnd = '</form>';
+
+        $('#previewData').html(heading + editFormStart + editIDDesktop + editFirstNameDiv + editLastNameDiv + editEmailDiv + editDeptDiv + saveBtn + cancelBtn + editFormEnd);
+
+        $.each(deptOptionData, function (key, value) {
+          $('#editDeptDesktop').append($('<option value=' + value.id + '>' + value.name + '</option>'));
+        });
+
+        $('#editDeptDesktop').val(previewDeptID);
+
+        $("#editUserForm").submit(function (e) {
+          e.preventDefault();
+          var previewID = $('#userEditIDDesktop').text();
+          var previewFirstName = $('#editFirstNameDesktop').val();
+          var previewLastName = $('#editLastNameDesktop').val();
+          var previewEmail = $('#editEmailAddressDesktop').val();
+          var previewDeptID = $('#editDeptDesktop').val();
+          editProfileAJAX(previewID, previewFirstName, previewLastName, previewDeptID, previewEmail);
+        })
+
+        $("#deleteProfilebtn").click(function (e) {
+          e.preventDefault();
+
+          var profileID = $('#userEditIDDesktop').text();
+          var previewFirstName = $('#editFirstNameDesktop').val();
+
+          let modalDiv = '<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">';
+          let modalHead = '<div class="modal-header modalHead"><h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>';
+          let modalBody = '<div class="modal-body modalBody">' + previewFirstName + '<span class="d-none" id="profileID">' + profileID + '</span></div>';
+          let modalFoot = '<div class="modal-footer modalFoot"><button type="button" class="btn cancelButton" data-bs-dismiss="modal">Cancel</button>';
+          let acceptBtn = '<button type="button" id="acceptDelete" class="btn saveButton">Understood</button>';
+          let closeDivs = '</div></div></div></div>';
+
+          $('#confirmModal').html(modalDiv + modalHead + modalBody + modalFoot + acceptBtn + closeDivs);
+
+          $('#staticBackdrop').modal('show');
+
+          $("#acceptDelete").click(function (e) {
+            e.preventDefault();
+            let profileID = $('#profileID').text();
+            deleteProfileAJAX(profileID);
+            $('#staticBackdrop').modal('hide');
+          })
+        })
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+
+      let divOne = "<div class='container-fluid failBox'>";
+      let contentfailIcon = "<p id='failIcon'><i class='far fa-times-circle'></i></p>";
+      let contentfailText = "<p id='failText'>Failed to delete</p>";
+      let divOneExit = "</div>";
+      let failScreen = $(divOne + contentfailIcon + contentfailText + divOneExit).fadeOut(2500);
+
+      $('#previewData').append(failScreen);
+
+      console.log(':' + textStatus + ' : ' + errorThrown);
     },
   });
 }
@@ -664,63 +631,37 @@ function allDeptTable() {
       });
 
       $('.clickRowDept').click(function () {
-
         let row = $(this).closest("tr");
-        let deptNameF = row.find("td:eq(0)").text();
         let departmentIdF = row.find("td:eq(1)").text();
-        let locationIdF = row.find("td:eq(2)").text();
-
-        let headingDeptEdt = '<div class="createContactHeader">Edit Department<button class="btn exitButton float-end" onClick="cancelButton()"><i class="fas fa-share-square"></i></button></div>';
-        let editFormStart = '<form id="editDepartment" method="post">';
-        let editDeptID = '<p class="d-none" id="editDeptID">' + departmentIdF + '</p>';
-        let editDeptName = '<div class="mb-3 form-group"><label for="editDeptName" class="labels">Edit Name</label><input class="form-control" name="editDeptName" id="editDeptName" value="' + deptNameF + '" required></input><div class="col-sm-5 messages"></div></div>';
-
-        let EditDepartmentLocation = '<div class="mb-3 form-group"><label for="editDepartmentLocation" class="labels">Change Location</label><select class="form-select" name="editDepartmentLocation" id="editDepartmentLocation" value="' + locationIdF + '" required></select><div class="col-sm-5 messages"></div></div>';
-
-        let saveBtn = '<div><button type="submit" class="btn saveButton">Save</button>';
-        let cancelBtn = '<button type="button" class="btn cancelButton" onClick="cancelButton()" data-bs-dismiss="modal">Cancel</button></div>';
-        let editFormEnd = '</form>';
-
-        $('#previewData').html("");
-
-        $('#previewData').append(headingDeptEdt + editFormStart + editDeptID + editDeptName + EditDepartmentLocation + saveBtn + cancelBtn + editFormEnd);
-        populateLocationforDeptOptions();
-
-        $('#editDepartment').submit(function (e) {
-          e.preventDefault();
-          let departmentId = $('#editDeptID').text();
-          let deptName = $('#editDeptName').val();
-          let locationId = $('#editDepartmentLocation').val();
-          editDepartmentAJAX(departmentId, deptName, locationId);
-        })
+        getDeptByID(departmentIdF);
 
       })
 
 
       $(".deleteDepartment").click(function (e) {
-            e.preventDefault();
-                let row = $(this).closest("tr");
+        e.preventDefault();
+        let row = $(this).closest("tr");
         let deleteDeptID = row.find(".deptAdminID").text();
         let deleteDeptName = row.find(".deptNameEdit").text();
 
-            let modalDiv = '<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">';
-            let modalHead = '<div class="modal-header modalHead"><h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>';
-            let modalBody = '<div class="modal-body modalBody">' + deleteDeptName + '<span class="d-none" id="deleteDeptID">' + deleteDeptID + '</span></div>';
-            let modalFoot = '<div class="modal-footer modalFoot"><button type="button" class="btn cancelButton" data-bs-dismiss="modal">Cancel</button>';
-            let acceptBtn = '<button type="button" id="acceptDelete" class="btn saveButton">Understood</button>';
-            let closeDivs = '</div></div></div></div>';
+        let modalDiv = '<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">';
+        let modalHead = '<div class="modal-header modalHead"><h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>';
+        let modalBody = '<div class="modal-body modalBody">' + deleteDeptName + '<span class="d-none" id="deleteDeptID">' + deleteDeptID + '</span></div>';
+        let modalFoot = '<div class="modal-footer modalFoot"><button type="button" class="btn cancelButton" data-bs-dismiss="modal">Cancel</button>';
+        let acceptBtn = '<button type="button" id="acceptDelete" class="btn saveButton">Understood</button>';
+        let closeDivs = '</div></div></div></div>';
 
-            $('#confirmModal').html(modalDiv + modalHead + modalBody + modalFoot + acceptBtn + closeDivs);
+        $('#confirmModal').html(modalDiv + modalHead + modalBody + modalFoot + acceptBtn + closeDivs);
 
-            $('#staticBackdrop').modal('show');
+        $('#staticBackdrop').modal('show');
 
-            $("#acceptDelete").click(function (e) {
-              e.preventDefault();
-              let deleteDeptID = $('#deleteDeptID').text();
-               deleteDeptAJAX(deleteDeptID);
-              $('#staticBackdrop').modal('hide');
-            })
-          })
+        $("#acceptDelete").click(function (e) {
+          e.preventDefault();
+          let deleteDeptID = $('#deleteDeptID').text();
+          deleteDeptAJAX(deleteDeptID);
+          $('#staticBackdrop').modal('hide');
+        })
+      })
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -823,7 +764,15 @@ function deleteDeptAJAX(deleteDeptID) {
       deleteDeptID: deleteDeptID,
     },
 
-    success: function () {
+    success: function (result) {
+      
+      var denied = (result.status.description);
+      
+      if(denied == "delete denied") {
+        alert('Department cannot be deleted: Contains active employees')
+      }
+      
+      else {
       let divOne = "<div class='container-fluid deleteSuccessBox'>";
       let contentSuccessIcon = "<p id='deleteSuccessIcon'><i class='far fa-check-circle'></i></p>";
       let contentSuccessText = "<p id='deleteSuccessText'>Delete Successful</p>";
@@ -836,6 +785,68 @@ function deleteDeptAJAX(deleteDeptID) {
         allDeptTable();
         clearDiv
       }, 1500);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+
+      let divOne = "<div class='container-fluid failBox'>";
+      let contentfailIcon = "<p id='failIcon'><i class='far fa-times-circle'></i></p>";
+      let contentfailText = "<p id='failText'>Failed to delete</p>";
+      let divOneExit = "</div>";
+      let failScreen = $(divOne + contentfailIcon + contentfailText + divOneExit).fadeOut(2500);
+
+      $('#previewData').append(failScreen);
+
+      console.log(':' + textStatus + ' : ' + errorThrown);
+    },
+  });
+}
+
+function getDeptByID(departmentIdF) {
+  $.ajax({
+    url: './php/getDepartmentByID.php',
+    type: 'POST',
+    dataType: "json",
+    data: {
+      id: departmentIdF,
+    },
+
+    success: function (result) {
+      
+      console.log(result);
+
+      var deptDataID = result.data['0'].id;
+      var deptLocationID = result.data['0'].locationID;
+      var deptName = result.data['0'].name;
+      
+      console.log(deptLocationID);
+
+
+        let headingDeptEdt = '<div class="createContactHeader">Edit Department<button class="btn exitButton float-end" onClick="cancelButton()"><i class="fas fa-share-square"></i></button></div>';
+        let editFormStart = '<form id="editDepartment" method="post">';
+        let editDeptID = '<p class="d-none" id="editDeptID">' + deptDataID + '</p>';
+        let editDeptName = '<div class="mb-3 form-group"><label for="editDeptName" class="labels">Edit Name</label><input class="form-control" name="editDeptName" id="editDeptName" value="' + deptName + '" required></input><div class="col-sm-5 messages"></div></div>';
+
+        let EditDepartmentLocation = '<div class="mb-3 form-group"><label for="editDepartmentLocation" class="labels">Change Location</label><select class="form-select" name="editDepartmentLocation" id="editDepartmentLocation" value="" required></select><div class="col-sm-5 messages"></div></div>';
+
+        let saveBtn = '<div><button type="submit" class="btn saveButton">Save</button>';
+        let cancelBtn = '<button type="button" class="btn cancelButton" onClick="cancelButton()" data-bs-dismiss="modal">Cancel</button></div>';
+        let editFormEnd = '</form>';
+
+        $('#previewData').html("");
+
+        $('#previewData').html(headingDeptEdt + editFormStart + editDeptID + editDeptName + EditDepartmentLocation + saveBtn + cancelBtn + editFormEnd);
+        
+        populateLocationforDeptOptions(deptLocationID);
+          
+        $('#editDepartment').submit(function (e) {
+          e.preventDefault();
+          let departmentId = $('#editDeptID').text();
+          let deptName = $('#editDeptName').val();
+          let locationId = $('#editDepartmentLocation').val();
+          editDepartmentAJAX(departmentId, deptName, locationId);
+        })
+      
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -854,7 +865,6 @@ function deleteDeptAJAX(deleteDeptID) {
 }
 
 // END OF DEPARTMENT CRUD FUNCTIONS ===========================================================================<><><><>
-
 
 // START OF LOCATION CRUD FUNCTIONS -----------------------------------------================---------------------->>>><<<<<
 
@@ -890,27 +900,12 @@ function allLocationsTable() {
       $('.clickRowLoc').click(function () {
 
         let row = $(this).closest("tr");
-        let locationNameF = row.find("td:eq(0)").text();
         let locationIdF = row.find("td:eq(1)").text();
+        
+        getLocationByID(locationIdF);
 
-        let headingLocEdt = '<div class="createContactHeader">Edit Location<button class="btn exitButton float-end" onClick="cancelButton()"><i class="fas fa-share-square"></i></button></div>';
-        let formStart = '<form autocomplete="off" id="editLocation" method="post">'
-        let editLocationID = '<p class="d-none" id="editLocationID">' + locationIdF + '</p>';
-        let editLocationName = '<input class="form-input" name="editLocationName" id="editLocationName" value="' + locationNameF + '" required></input><div class="col-sm-5 messages"></div>';
-        let saveBtn = '<div><button type="submit" class="btn saveButton">Save</button>';
-        let cancelBtn = '<button type="button" class="btn cancelButton" onClick="cancelButton()" data-bs-dismiss="modal">Cancel</button></div>';
-        let formEnd = '</form>'
-        $('#previewData').html(headingLocEdt + formStart + editLocationID + editLocationName + saveBtn + cancelBtn + formEnd);
 
-        $('#editLocation').submit(function (e) {
-          e.preventDefault();
-          let locationId = $('#editLocationID').text();
-          let locationName = $('#editLocationName').val();
-          editLocationAJAX(locationId, locationName);
-        });
       })
-
-
 
       $('#addNewLocation').click(function () {
 
@@ -933,29 +928,29 @@ function allLocationsTable() {
 
 
       $(".deleteLocation").click(function (e) {
-            e.preventDefault();
+        e.preventDefault();
         let row = $(this).closest("tr");
         let deleteLocationID = row.find(".locationAdminID").text();
         let deleteLocationName = row.find(".clickRowLoc").text();
 
-            let modalDiv = '<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">';
-            let modalHead = '<div class="modal-header modalHead"><h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>';
-            let modalBody = '<div class="modal-body modalBody">' + deleteLocationName + '<span class="d-none" id="deleteLocationID">' + deleteLocationID + '</span></div>';
-            let modalFoot = '<div class="modal-footer modalFoot"><button type="button" class="btn cancelButton" data-bs-dismiss="modal">Cancel</button>';
-            let acceptBtn = '<button type="button" id="acceptDelete" class="btn saveButton">Understood</button>';
-            let closeDivs = '</div></div></div></div>';
+        let modalDiv = '<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">';
+        let modalHead = '<div class="modal-header modalHead"><h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>';
+        let modalBody = '<div class="modal-body modalBody">' + deleteLocationName + '<span class="d-none" id="deleteLocationID">' + deleteLocationID + '</span></div>';
+        let modalFoot = '<div class="modal-footer modalFoot"><button type="button" class="btn cancelButton" data-bs-dismiss="modal">Cancel</button>';
+        let acceptBtn = '<button type="button" id="acceptDelete" class="btn saveButton">Understood</button>';
+        let closeDivs = '</div></div></div></div>';
 
-            $('#confirmModal').html(modalDiv + modalHead + modalBody + modalFoot + acceptBtn + closeDivs);
+        $('#confirmModal').html(modalDiv + modalHead + modalBody + modalFoot + acceptBtn + closeDivs);
 
-            $('#staticBackdrop').modal('show');
+        $('#staticBackdrop').modal('show');
 
-            $("#acceptDelete").click(function (e) {
-              e.preventDefault();
-              let deleteLocationID = $('#deleteLocationID').text();
-               deleteLocationAJAX(deleteLocationID);
-              $('#staticBackdrop').modal('hide');
-            })
-          })
+        $("#acceptDelete").click(function (e) {
+          e.preventDefault();
+          let deleteLocationID = $('#deleteLocationID').text();
+          deleteLocationAJAX(deleteLocationID);
+          $('#staticBackdrop').modal('hide');
+        })
+      })
 
 
     },
@@ -1006,6 +1001,107 @@ function newLocationAJAX(locationID) {
   });
 }
 
+
+function deleteLocationAJAX(deleteLocationID) {
+  $.ajax({
+    url: './php/deleteLocationByID.php',
+    type: 'POST',
+    dataType: "json",
+    data: {
+      deleteLocationID: deleteLocationID,
+    },
+
+    success: function (result) {
+      
+      var denied = (result.status.description);
+      
+      if(denied == "delete denied") {
+        alert('Location cannot be deleted: Contains active departments')
+      }
+      
+      else {
+      
+      let divOne = "<div class='container-fluid deleteSuccessBox'>";
+      let contentSuccessIcon = "<p id='deleteSuccessIcon'><i class='far fa-check-circle'></i></p>";
+      let contentSuccessText = "<p id='deleteSuccessText'>Delete Successful</p>";
+      let divOneExit = "</div>";
+      let successScreen = $(divOne + contentSuccessIcon + contentSuccessText + divOneExit).fadeOut(2500);
+      $('#previewData').append(successScreen);
+      setTimeout(function () {
+        let clearDiv = $('#previewData').html("");
+        allResults();
+        allLocationsTable();
+
+        clearDiv
+      }, 1500);
+      }
+
+    },
+    
+    error: function (jqXHR, textStatus, errorThrown) {
+
+      let divOne = "<div class='container-fluid failBox'>";
+      let contentfailIcon = "<p id='failIcon'><i class='far fa-times-circle'></i></p>";
+      let contentfailText = "<p id='failText'>Failed to delete</p>";
+      let divOneExit = "</div>";
+      let failScreen = $(divOne + contentfailIcon + contentfailText + divOneExit).fadeOut(2500);
+
+      $('#previewData').append(failScreen);
+
+      console.log(':' + textStatus + ' : ' + errorThrown);
+    },
+  });
+}
+
+function getLocationByID(locationIdF) {
+  $.ajax({
+    url: './php/getLocationByID.php',
+    type: 'POST',
+    dataType: "json",
+    data: {
+      id: locationIdF,
+    },
+
+    success: function (result) {
+      
+
+      var locationID = result.data['0'].id;
+      var locationName = result.data['0'].name;
+      
+        let headingLocEdt = '<div class="createContactHeader">Edit Location<button class="btn exitButton float-end" onClick="cancelButton()"><i class="fas fa-share-square"></i></button></div>';
+        let formStart = '<form autocomplete="off" id="editLocation" method="post">'
+        let editLocationID = '<p class="d-none" id="editLocationID">' + locationID + '</p>';
+        let editLocationName = '<input class="form-input" name="editLocationName" id="editLocationName" value="' + locationName + '" required></input><div class="col-sm-5 messages"></div>';
+        let saveBtn = '<div><button type="submit" class="btn saveButton">Save</button>';
+        let cancelBtn = '<button type="button" class="btn cancelButton" onClick="cancelButton()" data-bs-dismiss="modal">Cancel</button></div>';
+        let formEnd = '</form>'
+        $('#previewData').html(headingLocEdt + formStart + editLocationID + editLocationName + saveBtn + cancelBtn + formEnd);
+
+        $('#editLocation').submit(function (e) {
+          e.preventDefault();
+          let locationId = $('#editLocationID').text();
+          let locationName = $('#editLocationName').val();
+          editLocationAJAX(locationId, locationName);
+        });
+        
+
+
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+
+      let divOne = "<div class='container-fluid failBox'>";
+      let contentfailIcon = "<p id='failIcon'><i class='far fa-times-circle'></i></p>";
+      let contentfailText = "<p id='failText'>Failed to delete</p>";
+      let divOneExit = "</div>";
+      let failScreen = $(divOne + contentfailIcon + contentfailText + divOneExit).fadeOut(2500);
+
+      $('#previewData').append(failScreen);
+
+      console.log(':' + textStatus + ' : ' + errorThrown);
+    },
+  });
+}
+
 function editLocationAJAX(locationId, locationName) {
   $.ajax({
     url: './php/editLocation.php',
@@ -1038,46 +1134,6 @@ function editLocationAJAX(locationId, locationName) {
       let divOne = "<div class='container-fluid failBox'>";
       let contentfailIcon = "<p id='failIcon'><i class='far fa-times-circle'></i></p>";
       let contentfailText = "<p id='failText'>Failed to record</p>";
-      let divOneExit = "</div>";
-      let failScreen = $(divOne + contentfailIcon + contentfailText + divOneExit).fadeOut(2500);
-
-      $('#previewData').append(failScreen);
-
-      console.log(':' + textStatus + ' : ' + errorThrown);
-    },
-  });
-}
-
-function deleteLocationAJAX(deleteLocationID) {
-  $.ajax({
-    url: './php/deleteLocationByID.php',
-    type: 'POST',
-    dataType: "json",
-    data: {
-      deleteLocationID: deleteLocationID,
-    },
-
-    success: function () {
-      let divOne = "<div class='container-fluid deleteSuccessBox'>";
-      let contentSuccessIcon = "<p id='deleteSuccessIcon'><i class='far fa-check-circle'></i></p>";
-      let contentSuccessText = "<p id='deleteSuccessText'>Delete Successful</p>";
-      let divOneExit = "</div>";
-      let successScreen = $(divOne + contentSuccessIcon + contentSuccessText + divOneExit).fadeOut(2500);
-      $('#previewData').append(successScreen);
-      setTimeout(function () {
-        let clearDiv = $('#previewData').html("");
-        allResults();
-        allLocationsTable();
-        
-        clearDiv
-      }, 1500);
-
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-
-      let divOne = "<div class='container-fluid failBox'>";
-      let contentfailIcon = "<p id='failIcon'><i class='far fa-times-circle'></i></p>";
-      let contentfailText = "<p id='failText'>Failed to delete</p>";
       let divOneExit = "</div>";
       let failScreen = $(divOne + contentfailIcon + contentfailText + divOneExit).fadeOut(2500);
 
