@@ -29,4 +29,6 @@
 <file name="editLocation.php" server="81.16.28.165//public_html/Dir/" local="132767234033377325" remote="132767198400000000" Dst="2" />
 <file name="getAllByLocation.php" server="81.16.28.165//public_html/Dir/" local="132767271902039672" remote="132767283600000000" Dst="2" />
 <file name="getLocationByID.php" server="81.16.28.165//public_html/Dir/" local="132769603697564214" remote="132769600800000000" Dst="2" />
+<file name="checkDeleteDepartment.php" server="81.16.28.165//public_html/Dir/" local="132770378233719908" remote="132770349000000000" Dst="2" />
+<file name="checkDeleteLocation.php" server="81.16.28.165//public_html/Dir/" local="132770370735109956" remote="132770349000000000" Dst="2" />
 </dwsync>
