@@ -72,8 +72,9 @@ function allResults() {
     dataType: "json",
     type: 'POST',
     success: function (result) {
-
-      $('#allDataTable').html('');
+      
+      
+    $('#allDataTable').html('');
 
       var allData = result['data'];
       var pID, firstName, lastName, dept, location, eMail, dID, lID;
@@ -87,17 +88,17 @@ function allResults() {
         let logo = '<a class="navbar-brand font-monospace navLogo" href="./">dir</a>';
         let divTwo = '<div class="navbar-nav" id="navbarSupportedContent">';
         let iconsDiv = '<div class="ms-auto">';
-        let iconOne = '<a class="iconsBottom" id=""><i class="fas fa-sort-amount-down"></i></a>';
-        let iconTwo = '<a class="iconsBottom" id=""><i class="fas fa-sort-amount-down-alt"></i></a>';
-        let iconThree = '<a class="iconsBottom" id="addUserDesktopPanel"><i class="fas fa-user-plus"></i></a>';
-        let iconFour = '<a class="iconsBottom" id="deptAdminPanel"><i class="fas fa-users-cog"></i></a>';
-        let iconFive = '<a class="iconsBottom" id="locationAdminPanel"><i class="fas fa-map-marker-alt"></i></a>';
+        //let iconOne = '<a class="iconsTop" id=""><i class="fas fa-sort-amount-down"></i></a>';
+        //let iconTwo = '<a class="iconsTop" id=""><i class="fas fa-sort-amount-down-alt"></i></a>';
+        let iconThree = '<a class="iconsTop" id="addUserDesktopPanel"><i class="fas fa-user-plus"></i></a>';
+        let iconFour = '<a class="iconsTop" id="deptAdminPanel"><i class="fas fa-users-cog"></i></a>';
+        let iconFive = '<a class="iconsTop" id="locationAdminPanel"><i class="fas fa-map-marker-alt"></i></a>';
         let iconsDivExit = '</div>';
         let divTwoExit = '</div>';
         let divOneExit = '</div>';
         let navBarExit = '</nav>';
 
-        $('#navBarRender').html(navBarStart + divOne + logo + divTwo + iconsDiv + iconOne + iconTwo + iconThree + iconFour + iconFive + iconsDivExit + divTwoExit + divOneExit + navBarExit);
+        $('#navBarRender').html(navBarStart + divOne + logo + divTwo + iconsDiv + iconThree + iconFour + iconFive + iconsDivExit + divTwoExit + divOneExit + navBarExit);
 
         let tableStart = '<table id="allDataTable" class="table table-striped table-hover">';
 
@@ -162,21 +163,23 @@ function allResults() {
         let navBarStart = '<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark fixed-bottom">';
         let divOne = '<div class="container-fluid">';
         let divTwo = '<div class="navbar-nav" id="navbarSupportedContent">';
-        let iconsDiv = '<div class="ms-auto">';
-        let iconOne = '<a class="iconsBottom" id=""><i class="fas fa-sort-amount-down"></i></a>';
-        let iconTwo = '<a class="iconsBottom" id=""><i class="fas fa-sort-amount-down-alt"></i></a>';
+        let iconsDiv = '<div id="bottomNav" class="">';
+        //let iconOne = '<a class="iconsBottom" id=""><i class="fas fa-sort-amount-down"></i></a>';
+        //let iconTwo = '<a class="iconsBottom" id=""><i class="fas fa-sort-amount-down-alt"></i></a>';
         let iconThree = '<a class="iconsBottom" id="addUserDesktopPanel"><i class="fas fa-user-plus"></i></a>';
         let iconFour = '<a class="iconsBottom" id="deptAdminPanel"><i class="fas fa-users-cog"></i></a>';
         let iconFive = '<a class="iconsBottom" id="locationAdminPanel"><i class="fas fa-map-marker-alt"></i></a>';
+        let searchBarMobile = '<input type="search" id="mobileSearch" onkeyup="mobileAllSearch()" placeholder="Search..." class="form-control search-input" data-table="mobileDirectory">'
         let iconsDivExit = '</div>';
+
         let divTwoExit = '</div>';
         let divOneExit = '</div>';
         let navBarExit = '</nav>';
 
-        $('#navBarRender').html(navBarStartTop + divOneTop + logoTop + divOneExitTop + navBarExitTop + navBarStart + divOne + divTwo + iconsDiv + iconOne + iconTwo + iconThree + iconFour + iconFive + iconsDivExit + divTwoExit + divOneExit + navBarExit);
+        $('#navBarRender').html(navBarStartTop + divOneTop + logoTop + divOneExitTop + navBarExitTop + navBarStart + divOne + divTwo + iconsDiv + iconThree + iconFour + iconFive + searchBarMobile + iconsDivExit + divTwoExit + divOneExit + navBarExit);
 
 
-        let tableStart = '<table id="allDataTable" class="table table-striped table-hover">';
+        let tableStart = '<table id="allDataTable" class="table table-striped table-hover mobileDirectory">';
 
         let tBody = "<tbody id='mainTable'></tbody>";
 
@@ -212,6 +215,8 @@ function allResults() {
 
           $('#mainTable').append(trStart + col1 + col2 + col3 + col4 + col5 + col6 + col7 + col8 + col9 + trEnd);
         }
+        
+      
       }
 
       // Make rows clickable to show preview and populate edit modal 
@@ -975,10 +980,11 @@ function newLocationAJAX(locationID) {
 
       if ($(document).width() > 990) {
         $('#previewData').append(successScreen);
-        allResults();
+        setTimeout(allLocationsTable, 1200);
+        
       } else {
         $('#previewData').append(successScreen);
-        setTimeout(allResults, 1800);
+        setTimeout(allLocationsTable, 1200);
       }
 
 
@@ -1317,7 +1323,19 @@ function searchFirst() {
   }
 }
 
-
+// Search Bar for Mobile Site only
+const mobileAllSearch = () => {
+  const trs = document.querySelectorAll('#allDataTable tr:not(.header)');
+  const filter = document.querySelector('#mobileSearch').value;
+  const regex = new RegExp(filter, 'i');
+  const isFoundInTds = (td) => regex.test(td.innerHTML);
+  const isFound = (childrenArr) => childrenArr.some(isFoundInTds);
+  const setTrStyleDisplay = ({ style, children }) => {
+    style.display = isFound([...children]) ? '' : 'none';
+  };
+  
+  trs.forEach(setTrStyleDisplay);
+};
 
 // Sort Functions
 
@@ -1375,6 +1393,12 @@ function sortTable(n) {
     }
   }
 }
+
+
+
+
+
+
 
 /* Form Validation 
 $(document).ready(function (e) {

@@ -29,15 +29,17 @@
   
   <div id="confirmModal"></div>
   
-    <!-- Font-Awesome *************-->
-  <script src="Asset Bank/fontawesome-free-5.15.4-web/js/all.min.js" crossorigin="anonymous"></script>
+    <!-- Font-Awesome ************* Our Server Copy (slow)
+  <script src="Asset Bank/fontawesome-free-5.15.4-web/js/all.min.js" crossorigin="anonymous"></script> -->
+    <!-- Font-Awesome ************* CDN Copy (fast) -->
+<script src="https://kit.fontawesome.com/979209c926.js" crossorigin="anonymous"></script>
     <!-- Jquery JS ****************-->
   <script src="js/jquery-3.6.0.min.js" type="text/javascript"></script>
-  <!-- UnderScore JS **********  -->
+  <!-- UnderScore JS **********  
   <script src="js/underscore-umd-min.js" type="text/javascript"></script>
   <!-- BootStrap JS *************-->
   <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
-  <!-- Validate JS **************-->
+  <!-- Validate JS **************
   <script src="js/validate.min.js" type="text/javascript"></script>
   <!-- Our Script ***************-->
   <script src="js/theCRMScript.js" type="text/javascript"></script>

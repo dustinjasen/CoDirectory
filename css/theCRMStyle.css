@@ -36,11 +36,13 @@
 .NavMargin {
   margin-bottom: 4%;
 }
-.iconsBottom {
+
+.iconsTop {
   font-size: 1.5rem;
   color: #ff4500;
   padding: 0rem 2rem;
 }
+
 #previewData {
   background-color: whitesmoke;
   position: fixed;
@@ -306,6 +308,28 @@ select:focus {
 .modalFoot {
   background-color: #fff;
 }
+
+#bottomNav {
+  display: inline!important;
+  text-align: center!important;
+  align-content: center!important;
+  align-items: center!important;
+  margin-left: 2rem!important;
+}
+
+.iconsBottom {
+  font-size: 1.4rem!important;
+  color: #ff4500;
+  padding: 0rem 2rem!important;
+  text-align: center!important;
+}
+
+#mobileSearch {
+  border-radius: 15px;
+  min-height: 4vh;
+  height: 4vh;
+}
+
 
 /* ===== Scrollbar CSS ===== */
   /* Firefox */
