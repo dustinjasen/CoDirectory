@@ -78,7 +78,20 @@
   margin: 0;
   font-weight: bold;
 }
-.DeptAdminHeader, .LocationAdminHeader {
+
+.LocationAdminHeader {
+  background-color: #212529;
+  height: 50px;
+  line-height: 50px;
+  min-width: 100%;
+  color: #ff4500;
+  font-size: 1.1rem;
+  text-align: left;
+  margin: 0;
+  font-weight: bold;
+}
+
+.DeptAdminHeader {
   background-color: #212529;
   height: 50px;
   line-height: 50px;

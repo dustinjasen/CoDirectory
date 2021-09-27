@@ -689,13 +689,9 @@ function editDepartmentAJAX(departmentId, deptName, locationId) {
       let divOneExit = "</div>";
       let successScreen = $(divOne + contentSuccessIcon + contentSuccessText + divOneExit).fadeOut(2500);
 
-      if ($(document).width() > 990) {
         $('#previewData').append(successScreen);
-        allResults();
-      } else {
-        $('#previewData').append(successScreen);
-        setTimeout(allResults, 1800);
-      }
+        setTimeout(allDeptTable, 1200);
+      
 
 
     },
@@ -1173,14 +1169,9 @@ function editLocationAJAX(locationId, locationName) {
       let divOneExit = "</div>";
       let successScreen = $(divOne + contentSuccessIcon + contentSuccessText + divOneExit).fadeOut(2500);
 
-      if ($(document).width() > 990) {
         $('#previewData').append(successScreen);
-        allResults();
-      } else {
-        $('#previewData').append(successScreen);
-        setTimeout(allResults, 1800);
-      }
-
+        setTimeout(allLocationsTable, 1200);
+  
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
